@@ -34,7 +34,9 @@ There is no database, no account system and no server-side code at runtime.
 ```
 
 - Preview: **http://simon-dev.rebecchi.uk:8090** (also LAN at
-  `http://192.168.1.127:8090`).
+  `http://192.168.1.127:8090`). Ports on this box: **8090** this repo's preview,
+  **9002** this repo's always-on copy, **8080** the sibling run-a-mile preview,
+  **9001** the run-a-mile editing page. Don't share a port.
 - Always rebuild and check before showing the result.
 - `make build`, `make preview` do the same thing.
 
