@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}{{ recipe.title }} &middot; {{ site.title }}{% endblock %}
+{% block description %}{{ recipe.protein }} g protein and {{ recipe.calories }} kcal per serving. {{ recipe.slot_label }} recipe, ready in {{ recipe.minutes }} minutes.{% endblock %}
+{% block og_title %}{{ recipe.title }}{% endblock %}
+{% block og_description %}{{ recipe.protein }} g protein, {{ recipe.calories }} kcal, {{ recipe.minutes }} minutes.{% endblock %}
+{% block og_path %}recipes/{{ recipe.slug }}/{% endblock %}
+{% block canonical_path %}recipes/{{ recipe.slug }}/{% endblock %}
+
+{% block content %}
+<div class="wrap">
+  <article class="recipe">
+    <a class="back" href="{{ base }}recipes.html">&larr; All recipes</a>
+
+    <header class="recipe-header">
+      <div class="recipe-labels">
+        <span class="pill">{{ recipe.slot_label }}</span>
+        <span class="pill pill-quiet">{{ recipe.diet_label }}</span>
+        <span class="recipe-time">{{ recipe.minutes }} min</span>
+      </div>
+      <h1>{{ recipe.title }}</h1>
+      {% if recipe.note %}<p class="recipe-note">{{ recipe.note }}</p>{% endif %}
+    </header>
+
+    <div class="recipe-layout">
+      <div class="recipe-main">
+        <section aria-labelledby="ingredients-heading">
+          <h2 id="ingredients-heading">Ingredients</h2>
+          <ul class="ingredients">
+            {% for item in recipe.ingredients %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+        </section>
+
+        <section class="section" aria-labelledby="method-heading">
+          <h2 id="method-heading">Method</h2>
+          <ol class="steps">
+            {% for step in recipe.steps %}<li>{{ step }}</li>{% endfor %}
+          </ol>
+        </section>
+      </div>
+
+      <aside class="recipe-side" aria-label="Nutrition">
+        <div class="nutrition">
+          <h2>Per serving</h2>
+          <dl class="nutrition-list">
+            <div><dt>Calories</dt><dd>{{ recipe.calories }} kcal</dd></div>
+            <div><dt>Protein</dt><dd>{{ recipe.protein }} g</dd></div>
+            <div><dt>Carbs</dt><dd>{{ recipe.carbs }} g</dd></div>
+            <div><dt>Fat</dt><dd>{{ recipe.fat }} g</dd></div>
+          </dl>
+          <div class="macro-bar macro-bar-lg" aria-hidden="true">
+            <span class="macro-protein" style="width: {{ (recipe.protein * 4 / recipe.calories * 100) | round(0) }}%"></span>
+            <span class="macro-carb" style="width: {{ (recipe.carbs * 4 / recipe.calories * 100) | round(0) }}%"></span>
+            <span class="macro-fat" style="width: {{ (recipe.fat * 9 / recipe.calories * 100) | round(0) }}%"></span>
+          </div>
+          <ul class="macro-key">
+            <li><span class="dot dot-protein"></span>Protein</li>
+            <li><span class="dot dot-carb"></span>Carbs</li>
+            <li><span class="dot dot-fat"></span>Fat</li>
+          </ul>
+        </div>
+
+        {% if recipe.allergen_labels %}
+        <div class="allergens">
+          <h2>Contains</h2>
+          <ul>
+            {% for label in recipe.allergen_labels %}<li>{{ label }}</li>{% endfor %}
+          </ul>
+        </div>
+        {% else %}
+        <div class="allergens">
+          <h2>Contains</h2>
+          <p class="lede">None of the eight common allergens we track. Check your labels anyway.</p>
+        </div>
+        {% endif %}
+
+        {% if recipe.tags %}
+        <div class="tags">
+          {% for tag in recipe.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+        </div>
+        {% endif %}
+      </aside>
+    </div>
+
+    <p class="recipe-cta">
+      <a class="btn" href="{{ base }}index.html">Build a day around this &rarr;</a>
+    </p>
+  </article>
+</div>
+{% endblock %}

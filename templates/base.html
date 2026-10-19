@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site.title }} — {{ site.description }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}{{ site.seo.description }}{% endblock %}">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1512" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:title" content="{% block og_title %}{{ site.title }}{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}{{ site.seo.description }}{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ site.url }}/{% block og_path %}{% endblock %}">
+  <meta property="og:site_name" content="{{ site.title }}">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/svg+xml" href="{{ base }}favicon.svg">
+  <link rel="canonical" href="{{ site.url }}/{% block canonical_path %}{% endblock %}">
+  <link rel="stylesheet" href="{{ base }}styles.css">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="{{ base }}index.html">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="16" cy="16" r="11"/>
+            <circle cx="16" cy="16" r="5.5"/>
+            <path d="M16 5v2.5M16 24.5V27"/>
+          </svg>
+        </span>
+        <span>{{ site.title }}</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="{{ base }}index.html" {% if page == 'planner' %}aria-current="page"{% endif %}>Planner</a>
+        <a href="{{ base }}recipes.html" {% if page == 'recipes' %}aria-current="page"{% endif %}>Recipes</a>
+        <a href="{{ base }}about.html" {% if page == 'about' %}aria-current="page"{% endif %}>How it works</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <a class="brand" href="{{ base }}index.html">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="16" cy="16" r="11"/>
+              <circle cx="16" cy="16" r="5.5"/>
+              <path d="M16 5v2.5M16 24.5V27"/>
+            </svg>
+          </span>
+          <span>{{ site.title }}</span>
+        </a>
+        <p>{{ site.description }}</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="{{ base }}index.html">Meal planner</a></li>
+          <li><a href="{{ base }}recipes.html">Recipes</a></li>
+          <li><a href="{{ base }}about.html">How it works</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul>
+          {% if site.social.instagram %}<li><a href="{{ site.social.instagram }}">Instagram</a></li>{% endif %}
+          {% if site.social.github %}<li><a href="{{ site.social.github }}">GitHub</a></li>{% endif %}
+          {% if site.social.twitter %}<li><a href="{{ site.social.twitter }}">Twitter</a></li>{% endif %}
+          {% if site.author.email %}<li><a href="mailto:{{ site.author.email }}">Email</a></li>{% endif %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="wrap footer-legal">
+      <span>&copy; {{ year }} {{ site.author.name }}. All rights reserved.</span>
+      <span>Made in {{ site.author.location }} &middot; real food, plenty of protein.</span>
+    </div>
+  </footer>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

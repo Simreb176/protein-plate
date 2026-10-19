@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>High-Protein Meal Planner &middot; Protein Plate</title>
+  <meta name="description" content="Pick your calorie and protein targets, choose how you eat, and get a full day of high-protein meals from 44 real recipes.">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#fbfaf7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0e1512" media="(prefers-color-scheme: dark)">
+
+  <meta property="og:title" content="Protein Plate">
+  <meta property="og:description" content="Build a high-protein day in one click. Choose your protein and calorie targets, pick a way of eating, and get a full meal plan from a shelf of real recipes.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://proteinplate.co.uk/">
+  <meta property="og:site_name" content="Protein Plate">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="canonical" href="https://proteinplate.co.uk/">
+  <link rel="stylesheet" href="styles.css">
+  
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="index.html">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="16" cy="16" r="11"/>
+            <circle cx="16" cy="16" r="5.5"/>
+            <path d="M16 5v2.5M16 24.5V27"/>
+          </svg>
+        </span>
+        <span>Protein Plate</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Primary">
+        <a href="index.html" aria-current="page">Planner</a>
+        <a href="recipes.html" >Recipes</a>
+        <a href="about.html" >How it works</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    
+<div class="wrap">
+  <section class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">High-protein meal generator</p>
+      <h1>Hit your protein.<br>Eat properly.</h1>
+      <p class="hero-lede">A high-protein meal planner built from proper recipes — pick a target, get a day.</p>
+      <ul class="hero-points">
+        <li>44 recipes, each with its protein and calories worked out</li>
+        <li>Filter by diet and the allergens you need to avoid</li>
+        <li>Swap any meal, or roll a whole new day</li>
+      </ul>
+    </div>
+    <aside class="hero-card" aria-label="What you get">
+      <p class="hero-card-label">A typical day</p>
+      <p class="hero-card-number">150<span>g</span></p>
+      <p class="hero-card-caption">protein across 4 meals, without a single shake if you'd rather not.</p>
+      <div class="hero-bars" aria-hidden="true">
+        <span style="--h: 62%"></span><span style="--h: 88%"></span><span style="--h: 46%"></span>
+        <span style="--h: 100%"></span><span style="--h: 74%"></span><span style="--h: 58%"></span>
+      </div>
+    </aside>
+  </section>
+
+  <section class="planner" aria-labelledby="planner-heading">
+    <div class="planner-head">
+      <div>
+        <h2 id="planner-heading">Build your day</h2>
+        <p>Set the numbers, then generate. Nothing is saved or sent anywhere — it all happens in your browser.</p>
+      </div>
+      <span class="pill">44 recipes on the shelf</span>
+    </div>
+
+    <form class="config" id="planner-form">
+      <fieldset class="config-block">
+        <legend>Daily targets</legend>
+        <div class="target">
+          <div class="target-head">
+            <label for="calories">Calories</label>
+            <output for="calories" id="calories-out">2100 kcal</output>
+          </div>
+          <input type="range" id="calories" name="calories"
+                 min="1400" max="3500"
+                 step="50" value="2100">
+          <div class="range-ends" aria-hidden="true">
+            <span>1400</span><span>3500</span>
+          </div>
+        </div>
+
+        <div class="target">
+          <div class="target-head">
+            <label for="protein">Protein</label>
+            <output for="protein" id="protein-out">150 g</output>
+          </div>
+          <input type="range" id="protein" name="protein"
+                 min="80" max="250"
+                 step="5" value="150">
+          <div class="range-ends" aria-hidden="true">
+            <span>80 g</span><span>250 g</span>
+          </div>
+        </div>
+      </fieldset>
+
+      <fieldset class="config-block">
+        <legend>Meals a day</legend>
+        <div class="segmented" id="meal-count">
+          
+          <label>
+            <input type="radio" name="meals" value="2"
+                   >
+            <span>2</span>
+          </label>
+          
+          <label>
+            <input type="radio" name="meals" value="3"
+                   >
+            <span>3</span>
+          </label>
+          
+          <label>
+            <input type="radio" name="meals" value="4"
+                   checked>
+            <span>4</span>
+          </label>
+          
+          <label>
+            <input type="radio" name="meals" value="5"
+                   >
+            <span>5</span>
+          </label>
+          
+          <label>
+            <input type="radio" name="meals" value="6"
+                   >
+            <span>6</span>
+          </label>
+          
+        </div>
+        <p class="config-hint" id="meal-count-hint"></p>
+      </fieldset>
+
+      <fieldset class="config-block">
+        <legend>How you eat</legend>
+        <div class="diet-list">
+          
+          <label class="diet-option">
+            <input type="radio" name="diet" value="omnivore"
+                   checked>
+            <span class="diet-body">
+              <span class="diet-name">Omnivore</span>
+              <span class="diet-desc">Everything, including meat and fish.</span>
+            </span>
+          </label>
+          
+          <label class="diet-option">
+            <input type="radio" name="diet" value="pescatarian"
+                   >
+            <span class="diet-body">
+              <span class="diet-name">Pescatarian</span>
+              <span class="diet-desc">Fish and seafood, plus vegetarian food.</span>
+            </span>
+          </label>
+          
+          <label class="diet-option">
+            <input type="radio" name="diet" value="vegetarian"
+                   >
+            <span class="diet-body">
+              <span class="diet-name">Vegetarian</span>
+              <span class="diet-desc">No meat or fish.</span>
+            </span>
+          </label>
+          
+          <label class="diet-option">
+            <input type="radio" name="diet" value="vegan"
+                   >
+            <span class="diet-body">
+              <span class="diet-name">Vegan</span>
+              <span class="diet-desc">No animal products at all.</span>
+            </span>
+          </label>
+          
+        </div>
+      </fieldset>
+
+      <fieldset class="config-block">
+        <legend>Leave out</legend>
+        <p class="config-hint">Tick anything you need to avoid and those recipes won't be chosen.</p>
+        <div class="chips">
+          
+          <label class="chip">
+            <input type="checkbox" name="avoid" value="dairy">
+            <span>Dairy</span>
+          </label>
+          
+          <label class="chip">
+            <input type="checkbox" name="avoid" value="gluten">
+            <span>Gluten</span>
+          </label>
+          
+          <label class="chip">
+            <input type="checkbox" name="avoid" value="eggs">
+            <span>Eggs</span>
+          </label>
+          
+          <label class="chip">
+            <input type="checkbox" name="avoid" value="fish">
+            <span>Fish</span>
+          </label>
+          
+          <label class="chip">
+            <input type="checkbox" name="avoid" value="shellfish">
+            <span>Shellfish</span>
+          </label>
+          
+          <label class="chip">
+            <input type="checkbox" name="avoid" value="soy">
+            <span>Soy</span>
+          </label>
+          
+          <label class="chip">
+            <input type="checkbox" name="avoid" value="nuts">
+            <span>Nuts</span>
+          </label>
+          
+          <label class="chip">
+            <input type="checkbox" name="avoid" value="sesame">
+            <span>Sesame</span>
+          </label>
+          
+        </div>
+      </fieldset>
+
+      <div class="config-actions">
+        <button class="btn btn-generate" type="submit">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor"
+               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 12h16M14 6l6 6-6 6"/>
+          </svg>
+          Generate my day
+        </button>
+        <button class="btn btn-ghost" type="button" id="shuffle" hidden>Shuffle</button>
+        <button class="btn btn-quiet" type="button" id="print" hidden>Print</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="results" id="results" aria-live="polite" aria-labelledby="results-heading" hidden>
+    <div class="results-head">
+      <div>
+        <h2 id="results-heading">Your day</h2>
+        <p id="results-summary" class="results-summary"></p>
+      </div>
+      <div class="totals" id="totals"></div>
+    </div>
+
+    <div class="plan" id="plan"></div>
+
+    <p class="plan-foot" id="plan-foot"></p>
+  </section>
+
+  <noscript>
+    <div class="notice">
+      <strong>The planner needs JavaScript.</strong>
+      You can still browse every recipe on the <a href="recipes.html">recipes page</a>.
+    </div>
+  </noscript>
+
+  
+  <section class="section" aria-labelledby="featured-heading">
+    <div class="section-head">
+      <h2 id="featured-heading">Good places to start</h2>
+      <a class="more" href="recipes.html">All recipes &rarr;</a>
+    </div>
+    <div class="recipe-grid">
+      
+      <a class="recipe-card" href="recipes/garlic-butter-chicken-greens/index.html">
+        <div class="recipe-card-top">
+          <span class="pill">Dinner</span>
+          <span class="recipe-time">25 min</span>
+        </div>
+        <h3>Garlic Butter Chicken &amp; Greens</h3>
+        <p class="recipe-macros">
+          <span><strong>55 g</strong> protein</span>
+          <span>620 kcal</span>
+        </p>
+        <div class="macro-bar" aria-hidden="true">
+          <span class="macro-protein" style="width: 35.0%"></span>
+          <span class="macro-carb" style="width: 23.0%"></span>
+          <span class="macro-fat" style="width: 38.0%"></span>
+        </div>
+        <span class="recipe-more">See the recipe &rarr;</span>
+      </a>
+      
+      <a class="recipe-card" href="recipes/teriyaki-salmon-rice-bowl/index.html">
+        <div class="recipe-card-top">
+          <span class="pill">Dinner</span>
+          <span class="recipe-time">25 min</span>
+        </div>
+        <h3>Teriyaki Salmon Rice Bowl</h3>
+        <p class="recipe-macros">
+          <span><strong>44 g</strong> protein</span>
+          <span>650 kcal</span>
+        </p>
+        <div class="macro-bar" aria-hidden="true">
+          <span class="macro-protein" style="width: 27.0%"></span>
+          <span class="macro-carb" style="width: 43.0%"></span>
+          <span class="macro-fat" style="width: 28.0%"></span>
+        </div>
+        <span class="recipe-more">See the recipe &rarr;</span>
+      </a>
+      
+      <a class="recipe-card" href="recipes/tofu-peanut-noodles/index.html">
+        <div class="recipe-card-top">
+          <span class="pill">Dinner</span>
+          <span class="recipe-time">20 min</span>
+        </div>
+        <h3>Tofu Peanut Noodles</h3>
+        <p class="recipe-macros">
+          <span><strong>32 g</strong> protein</span>
+          <span>640 kcal</span>
+        </p>
+        <div class="macro-bar" aria-hidden="true">
+          <span class="macro-protein" style="width: 20.0%"></span>
+          <span class="macro-carb" style="width: 44.0%"></span>
+          <span class="macro-fat" style="width: 37.0%"></span>
+        </div>
+        <span class="recipe-more">See the recipe &rarr;</span>
+      </a>
+      
+    </div>
+  </section>
+  
+</div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="16" cy="16" r="11"/>
+              <circle cx="16" cy="16" r="5.5"/>
+              <path d="M16 5v2.5M16 24.5V27"/>
+            </svg>
+          </span>
+          <span>Protein Plate</span>
+        </a>
+        <p>A high-protein meal planner built from proper recipes — pick a target, get a day.</p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Meal planner</a></li>
+          <li><a href="recipes.html">Recipes</a></li>
+          <li><a href="about.html">How it works</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Elsewhere</h4>
+        <ul>
+          
+          
+          
+          <li><a href="mailto:hello@proteinplate.co.uk">Email</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="wrap footer-legal">
+      <span>&copy; 2026 Simon Rebecchi. All rights reserved.</span>
+      <span>Made in Nottingham, UK &middot; real food, plenty of protein.</span>
+    </div>
+  </footer>
+
+  
+<script src="app.js" defer></script>
+
+</body>
+</html>

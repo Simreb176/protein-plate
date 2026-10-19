@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}All Recipes &middot; {{ site.title }}{% endblock %}
+{% block description %}Every recipe in the Protein Plate planner, with calories, protein and allergens listed for each.{% endblock %}
+{% block og_path %}recipes.html{% endblock %}
+{% block canonical_path %}recipes.html{% endblock %}
+
+{% block content %}
+<div class="wrap">
+  <header class="page-head">
+    <p class="eyebrow">The shelf</p>
+    <h1>Every recipe</h1>
+    <p>{{ recipes | length }} meals, each with its protein and calories worked out. Pick one and the planner will build a day around it.</p>
+  </header>
+
+  <nav class="jump" aria-label="Jump to a meal">
+    {% for slot_key, slot_label in planner.slots.items() %}
+    <a href="#slot-{{ slot_key }}">{{ slot_label }}</a>
+    {% endfor %}
+  </nav>
+
+  {% for slot_key, slot_label in planner.slots.items() %}
+  {% set slot_recipes = recipes | selectattr('slot', 'equalto', slot_key) | list %}
+  {% if slot_recipes %}
+  <section class="section" id="slot-{{ slot_key }}" aria-labelledby="heading-{{ slot_key }}">
+    <div class="section-head">
+      <h2 id="heading-{{ slot_key }}">{{ slot_label }}</h2>
+      <span class="pill">{{ slot_recipes | length }}</span>
+    </div>
+    <div class="recipe-grid">
+      {% for recipe in slot_recipes %}
+      <a class="recipe-card" href="{{ base }}recipes/{{ recipe.slug }}/index.html">
+        <div class="recipe-card-top">
+          <span class="pill">{{ recipe.diet_label }}</span>
+          <span class="recipe-time">{{ recipe.minutes }} min</span>
+        </div>
+        <h3>{{ recipe.title }}</h3>
+        <p class="recipe-macros">
+          <span><strong>{{ recipe.protein }} g</strong> protein</span>
+          <span>{{ recipe.calories }} kcal</span>
+        </p>
+        <div class="macro-bar" aria-hidden="true">
+          <span class="macro-protein" style="width: {{ (recipe.protein * 4 / recipe.calories * 100) | round(0) }}%"></span>
+          <span class="macro-carb" style="width: {{ (recipe.carbs * 4 / recipe.calories * 100) | round(0) }}%"></span>
+          <span class="macro-fat" style="width: {{ (recipe.fat * 9 / recipe.calories * 100) | round(0) }}%"></span>
+        </div>
+        {% if recipe.allergen_labels %}
+        <p class="recipe-allergens">Contains {{ recipe.allergen_labels | join(', ') | lower }}</p>
+        {% endif %}
+        <span class="recipe-more">See the recipe &rarr;</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+  {% endfor %}
+</div>
+{% endblock %}

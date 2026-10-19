@@ -1,0 +1,73 @@
+# How the meal generator behaves.
+# These are the defaults, the ranges the sliders allow, and the vocabulary the
+# site uses for meals, diets and allergens. Recipes live in recipes.yml.
+
+defaults:
+  calories: 2100
+  protein: 150
+  meals: 4
+  diet: omnivore
+
+# The smallest and largest values the sliders will offer.
+limits:
+  calories: [1400, 3500]
+  protein: [80, 250]
+  meals: [2, 6]
+
+# Which meals make up a day, for each number of meals.
+# A snack can appear more than once; main meals never repeat.
+meal_counts:
+  2: [lunch, dinner]
+  3: [breakfast, lunch, dinner]
+  4: [breakfast, lunch, snack, dinner]
+  5: [breakfast, snack, lunch, dinner, snack]
+  6: [breakfast, snack, lunch, snack, dinner, snack]
+
+# What each meal is called on screen.
+slots:
+  breakfast: Breakfast
+  lunch: Lunch
+  dinner: Dinner
+  snack: Snack
+
+# Ways of eating, from most restrictive to least. A recipe's `diet` is the
+# strictest group it belongs to, so choosing "Vegetarian" also includes vegan
+# recipes, and "Pescatarian" includes vegetarian and vegan ones.
+diets:
+  - key: omnivore
+    label: Omnivore
+    description: Everything, including meat and fish.
+  - key: pescatarian
+    label: Pescatarian
+    description: Fish and seafood, plus vegetarian food.
+  - key: vegetarian
+    label: Vegetarian
+    description: No meat or fish.
+  - key: vegan
+    label: Vegan
+    description: No animal products at all.
+
+# Anything a recipe contains from this list can be filtered out.
+allergens:
+  - key: dairy
+    label: Dairy
+  - key: gluten
+    label: Gluten
+  - key: eggs
+    label: Eggs
+  - key: fish
+    label: Fish
+  - key: shellfish
+    label: Shellfish
+  - key: soy
+    label: Soy
+  - key: nuts
+    label: Nuts
+  - key: sesame
+    label: Sesame
+
+# Recipes shown on the home page. Use slugs from recipes.yml.
+featured:
+  - garlic-butter-chicken-greens
+  - teriyaki-salmon-rice-bowl
+  - tofu-peanut-noodles

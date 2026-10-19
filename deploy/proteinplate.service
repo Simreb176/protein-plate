@@ -1,0 +1,17 @@
+[Unit]
+Description=Protein Plate — the meal planner site
+Documentation=file:///home/simon/Development/protein-plate/README.md
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=simon
+WorkingDirectory=/home/simon/Development/protein-plate
+Environment=HOME=/home/simon
+Environment=PORT=9002
+ExecStart=/home/simon/Development/protein-plate/.venv/bin/python serve.py
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

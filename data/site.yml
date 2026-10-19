@@ -1,0 +1,25 @@
+# Site-wide settings.
+# The title, description, contact details and social links that appear across
+# every page. The SEO block is what search engines and shared links show.
+
+title: Protein Plate
+description: A high-protein meal planner built from proper recipes — pick a target, get a day.
+
+# The public URL once the site is live. Used for SEO tags and sharing cards.
+url: https://proteinplate.co.uk
+
+author:
+  name: Simon Rebecchi
+  tagline: Real food, sensible portions, plenty of protein.
+  location: Nottingham, UK
+  email: hello@proteinplate.co.uk
+
+# Social links. Leave a value empty and it simply won't be linked.
+social:
+  github:
+  instagram:
+  twitter:
+
+# Search engine / sharing description.
+seo:
+  description: "Build a high-protein day in one click. Choose your protein and calorie targets, pick a way of eating, and get a full meal plan from a shelf of real recipes."

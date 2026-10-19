@@ -1,0 +1,4 @@
+PyYAML>=6.0
+Jinja2>=3.0
+# Optional: enables Markdown in the About page copy (plain paragraphs without it)
+Markdown>=3.4
