@@ -12,13 +12,20 @@
 <div class="wrap">
   <header class="top">
     <h1><a href="{{ url_for('home') }}">Edit Protein Plate</a></h1>
-    <nav class="site" aria-label="Editing pages">
-      <a href="{{ url_for('home') }}" {% if page == 'site' %}aria-current="page"{% endif %}>Site</a>
-      <a href="{{ url_for('planner_page') }}" {% if page == 'planner' %}aria-current="page"{% endif %}>Planner</a>
-      <a href="{{ url_for('about_page') }}" {% if page == 'about' %}aria-current="page"{% endif %}>How it works</a>
-      <a href="{{ url_for('recipes_page') }}" {% if page == 'recipes' %}aria-current="page"{% endif %}>Recipes ({{ recipe_count }})</a>
-      <a href="{{ site_link }}" target="_blank" rel="noopener">The site</a>
-    </nav>
+    <div class="top-actions">
+      <nav class="site" aria-label="Editing pages">
+        <a href="{{ url_for('home') }}" {% if page == 'site' %}aria-current="page"{% endif %}>Site</a>
+        <a href="{{ url_for('planner_page') }}" {% if page == 'planner' %}aria-current="page"{% endif %}>Planner</a>
+        <a href="{{ url_for('about_page') }}" {% if page == 'about' %}aria-current="page"{% endif %}>How it works</a>
+        <a href="{{ url_for('recipes_page') }}" {% if page == 'recipes' %}aria-current="page"{% endif %}>Recipes ({{ recipe_count }})</a>
+        <a href="{{ site_link }}" target="_blank" rel="noopener">The site</a>
+      </nav>
+      <form method="post" action="{{ url_for('publish_page') }}" class="publish-form"
+            onsubmit="return confirm('Publish the saved changes to the live site at proteinplate.co.uk?')">
+        <input type="hidden" name="next" value="{{ request.path }}">
+        <button class="publish" type="submit">Publish to live</button>
+      </form>
+    </div>
   </header>
 
   {% for category, message in get_flashed_messages(with_categories=true) %}

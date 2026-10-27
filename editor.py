@@ -426,7 +426,14 @@ def python():
 
 
 def run(*args):
-    return subprocess.run(args, cwd=ROOT, capture_output=True, text=True, timeout=120)
+    return subprocess.run(
+        args,
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        env={**os.environ, "GIT_TERMINAL_PROMPT": "0"},
+    )
 
 
 def rebuild():
@@ -437,6 +444,35 @@ def rebuild():
 def commit(message):
     run("git", "add", "-A")
     run("git", "commit", "-m", message)
+
+
+def publish():
+    """Push what's committed (and commit anything left over) to GitHub.
+
+    The site itself is built by GitHub Actions, so a successful push here is
+    what makes proteinplate.co.uk update.
+    """
+    if run("git", "status", "--porcelain").stdout.strip():
+        run("git", "add", "-A")
+        saved = run("git", "commit", "-m", COMMIT_MESSAGE)
+        if saved.returncode != 0:
+            return False, (
+                "Your changes are safe on this machine, but couldn't be saved as a "
+                f"commit, so nothing was published.\n\n{(saved.stderr or saved.stdout).strip()}"
+            )
+
+    ahead = run("git", "rev-list", "--count", "@{upstream}..HEAD")
+    if ahead.returncode == 0 and ahead.stdout.strip() in ("", "0"):
+        return True, "Nothing new to publish — the live site is already up to date."
+
+    pushed = run("git", "push", "origin", "main")
+    if pushed.returncode != 0:
+        return False, (
+            "Your changes are safe on this machine, but GitHub didn't accept the push, "
+            "so the live site hasn't changed.\n\n"
+            f"{(pushed.stderr or pushed.stdout).strip()}"
+        )
+    return True, "Published. proteinplate.co.uk updates in about a minute."
 
 
 def after_save(message):
@@ -613,6 +649,19 @@ def recipe_delete():
     else:
         after_save(f"Deleted “{title}”.")
     return redirect(url_for("recipes_page"))
+
+
+# --------------------------------------------------------------------------
+# Publishing
+# --------------------------------------------------------------------------
+@app.post("/publish")
+def publish_page():
+    ok, message = publish()
+    flash(message, "good" if ok else "bad")
+    target = normalise(request.form.get("next")).strip() or url_for("home")
+    if not target.startswith("/"):
+        target = url_for("home")
+    return redirect(target)
 
 
 if __name__ == "__main__":

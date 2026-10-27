@@ -22,9 +22,9 @@ No password — it's only reachable from your own devices. It has four screens:
 - **Site** — the site's name, description, contact details and social links.
 
 Press **Save** and the copy on this machine at **:9002** is rebuilt immediately,
-and the change is committed so it can be undone. The public site at
-**proteinplate.co.uk** updates when the change is pushed to GitHub — ask the
-assistant to publish it, or it goes up with the next push.
+and the change is committed so it can be undone. When you're happy, press
+**Publish to live** at the top right: that sends the changes to GitHub, and
+**proteinplate.co.uk** updates in about a minute.
 
 ## The other way: just ask
 

@@ -92,8 +92,8 @@ make deploy-editor                                 # install + start the service
   and the featured recipes.
 - **How it works** — the title, intro, body and closing note on the about page.
 - **Site** — the site's own words.
-- Saving rebuilds `docs/` and makes a local commit. It does not push, so the
-  public site updates on the next push to `main`.
+- Saving rebuilds `docs/` and makes a local commit. **Publish to live** in the
+  header pushes `main`; GitHub Actions then rebuilds proteinplate.co.uk.
 - Recipes are re-emitted by a hand-rolled writer that matches the hand-written
   file byte for byte; `site.yml` / `planner.yml` / `about.yml` use ruamel in
   round-trip mode, where a no-op save must produce no diff.

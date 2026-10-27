@@ -86,7 +86,8 @@ you can do, and vice versa:
   the closing contact note. `{recipes}` in the body becomes the current count.
 - **Site** (`/`): the site's own words.
 - Every save rebuilds and makes a local commit ("Edit from the editing page").
-  It does **not** push, so the public site updates when `main` is pushed.
+  **Publish to live** in the header pushes `main`; GitHub Actions rebuilds the
+  public site. The push uses the repo's SSH remote and the service's `HOME`.
 - **Recipes are written by a hand-rolled writer** (`write_recipes` in
   `editor.py`) that reproduces the hand-written file byte for byte — the
   nested ingredient/step lists and the inline `[dairy, gluten]` style depend on

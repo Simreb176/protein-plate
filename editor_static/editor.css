@@ -35,6 +35,11 @@ nav.site a{font-size:.9rem;color:var(--muted);text-decoration:none;padding:6px 1
   border:1px solid transparent}
 nav.site a:hover{background:var(--bg-alt);color:var(--ink)}
 nav.site a[aria-current="page"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.top-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.publish-form{margin:0}
+.publish-form button{font:inherit;font-size:.86rem;font-weight:600;color:#fff;background:var(--accent);
+  border:1px solid var(--accent);border-radius:999px;padding:7px 15px;cursor:pointer}
+.publish-form button:hover{background:var(--accent-strong)}
 
 /* Notices ------------------------------------------------------------------- */
 .msg{border-radius:var(--radius-sm);padding:12px 14px;margin:14px 0;white-space:pre-wrap;font-size:.93rem}
