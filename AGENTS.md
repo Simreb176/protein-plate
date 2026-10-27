@@ -21,8 +21,12 @@ There is no database, no account system and no server-side code at runtime.
 | `app.js` | The planner: filtering, search, rendering, swaps | Yes — behaviour |
 | `generate.py` | Reads YAML, validates recipes, renders pages, writes `docs/` | Yes — when adding features |
 | `serve.py` | Rebuilds and serves the dev preview on port 8090 | Rarely |
-| `Makefile` | `build`, `preview`, `deploy`, `status`, `logs` | Yes |
+| `editor.py` | The owner's editing page (Flask) on port 9003: recipes, planner, site | Yes — part of the product |
+| `editor_templates/*.html` | The editing page's screens (`base`, `site_edit`, `planner_edit`, `recipes`, `recipe_form`) | Yes |
+| `editor_static/editor.css` | The editing page's stylesheet (not the site's) | Yes |
+| `Makefile` | `build`, `preview`, `deploy`, `status`, `logs`, `edit`, `deploy-editor` | Yes |
 | `deploy/proteinplate.service` | systemd unit for the always-on copy on port 9002 | Yes |
+| `deploy/proteinplate-editor.service` | systemd unit for the editing page on port 9003 | Yes |
 | `docs/` | The **generated** site. Never hand-edit; it is overwritten | No (generated) |
 | `.github/workflows/pages.yml` | Builds and publishes on push to `main` | No |
 
@@ -65,6 +69,28 @@ to its right: vegan → vegetarian → pescatarian → omnivore) and by allergen
 then does a hill-climb search over combinations to get closest to the calorie
 and protein targets. Protein is weighted higher than calories. Main meals never
 repeat; snacks may, at a cost. `rankSwaps` finds alternatives for one slot.
+
+### The editing page (the owner can do it himself)
+
+`make deploy-editor` installs and starts `deploy/proteinplate-editor.service`
+on **port 9003**. It writes the same `data/*.yml` files, so anything it does
+you can do, and vice versa:
+
+- **Recipes** (`/recipes`): list with a filter, add, edit, delete. Deleting
+  removes the recipe *and* its generated page (the build wipes `docs/`).
+- **Planner** (`/planner`): defaults, slider ranges, meal patterns, meals,
+  diets, allergens, featured recipes. It refuses to save a diet/allergen/meal
+  that a recipe still uses rather than breaking the build.
+- **Site** (`/`): the site's own words.
+- Every save rebuilds and makes a local commit ("Edit from the editing page").
+  There is no remote for this repo, so there is nothing to push.
+- **Recipes are written by a hand-rolled writer** (`write_recipes` in
+  `editor.py`) that reproduces the hand-written file byte for byte — the
+  nested ingredient/step lists and the inline `[dairy, gluten]` style depend on
+  it. `site.yml` / `planner.yml` go through ruamel in round-trip mode, and a
+  no-op save must produce no diff. Test both after touching the editor.
+- After changing `editor.py`, run `make deploy-editor` — the service runs from
+  this working tree and keeps the old code until restarted.
 
 ## 4. Preview and publish
 

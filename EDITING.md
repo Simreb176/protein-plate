@@ -4,7 +4,26 @@ This is your site: **Protein Plate**, a high-protein meal planner. You don't
 have to touch any code — describe what you want and it gets done. This guide is
 for when you're curious, or want to change a recipe by hand.
 
-## The easy way: just ask
+## The easiest way: the editing page
+
+There's a page for changing everything yourself, at:
+
+**http://simon-dev.rebecchi.uk:9003**
+
+No password — it's only reachable from your own devices. It has three screens:
+
+- **Recipes** — the whole shelf: add a recipe, edit one, delete one. Adding a
+  recipe puts it on the site straight away; the counts and the planner pick it
+  up by themselves.
+- **Planner** — the starting calorie/protein/meal targets, the slider ranges,
+  which meals make up a day, and the words used for meals, diets and allergens.
+- **Site** — the site's name, description, contact details and social links.
+
+Press **Save** and the site at **:9002** is rebuilt immediately. There's no
+publish step for this site: it only exists on your own machine, so saving *is*
+going live. Every save is also committed, so any change can be undone.
+
+## The other way: just ask
 
 Open the assistant in this folder and say what you'd like:
 
@@ -14,7 +33,7 @@ Open the assistant in this folder and say what you'd like:
 > "Add a 'no shellfish' filter."
 
 The assistant edits the files, rebuilds the site and gives you a link to look
-at. Nothing goes live until it's published.
+at.
 
 ## The three content files
 

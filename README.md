@@ -16,6 +16,7 @@ app.js              the planner itself (runs in the browser)
 generate.py         reads the YAML, renders templates, writes docs/
 docs/               the built site (generated — do not hand-edit)
 serve.py            rebuilds and serves the dev preview on port 8090
+editor.py           the editing page (Flask) on port 9003 — see below
 Makefile            build / preview / deploy
 deploy/             systemd unit for the always-on copy on port 9002
 ```
@@ -70,6 +71,28 @@ The planner fills each slot in the pattern for the chosen number of meals
 (`meal_counts` in `data/planner.yml`), filters by diet and allergens, then
 searches for the combination closest to the calorie and protein targets. It
 prefers not to repeat a recipe, and snacks are the only slot allowed to repeat.
+
+## The editing page
+
+`editor.py` is a small Flask app that lets the (non-technical) owner change
+everything from a browser, with no YAML:
+
+```bash
+.venv/bin/pip install -r requirements-editor.txt   # Flask + ruamel.yaml
+make edit                                          # foreground, port 9003
+make deploy-editor                                 # install + start the service
+```
+
+- **Recipes** — add, edit and delete; the shelf, the counts and the planner all
+  follow on the next build.
+- **Planner** — defaults, slider ranges, meal patterns, meals, diets, allergens
+  and the featured recipes.
+- **Site** — the site's own words.
+- Saving rebuilds `docs/` and makes a local commit. There is no remote here, so
+  there is no push.
+- Recipes are re-emitted by a hand-rolled writer that matches the hand-written
+  file byte for byte; `site.yml` / `planner.yml` use ruamel in round-trip mode,
+  where a no-op save must produce no diff.
 
 ## Publishing
 
