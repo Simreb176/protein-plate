@@ -7,7 +7,10 @@
 SERVICE := proteinplate
 UNIT    := deploy/$(SERVICE).service
 
-.PHONY: help build preview deploy undeploy status logs
+EDITOR_SERVICE := proteinplate-editor
+EDITOR_UNIT    := deploy/$(EDITOR_SERVICE).service
+
+.PHONY: help build preview deploy undeploy status logs edit deploy-editor undeploy-editor
 
 help:  ## show this list
 	@grep -E '^[a-z]+:.*?## ' $(MAKEFILE_LIST) | awk -F':.*?## ' '{printf "  make %-10s %s\n", $$1, $$2}'
@@ -35,3 +38,18 @@ status:  ## is the site service running?
 
 logs:  ## follow the site service's log
 	sudo journalctl -u $(SERVICE) -f
+
+edit:  ## run the editing page in the foreground (http://simon-dev.rebecchi.uk:9003)
+	.venv/bin/python editor.py
+
+deploy-editor:  ## install/refresh the editing page service and start it
+	sudo cp $(EDITOR_UNIT) /etc/systemd/system/$(EDITOR_SERVICE).service
+	sudo systemctl daemon-reload
+	sudo systemctl enable --now $(EDITOR_SERVICE)
+	sudo systemctl restart $(EDITOR_SERVICE)
+	@sudo systemctl --no-pager --lines=0 status $(EDITOR_SERVICE) | head -6
+
+undeploy-editor:  ## stop the editing page and remove its service
+	-sudo systemctl disable --now $(EDITOR_SERVICE)
+	sudo rm -f /etc/systemd/system/$(EDITOR_SERVICE).service
+	sudo systemctl daemon-reload

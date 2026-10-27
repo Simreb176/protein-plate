@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% block title %}Planner &middot; Edit Protein Plate{% endblock %}
+
+{% block content %}
+<p class="howto">
+  How the meal generator behaves: the starting targets, the slider ranges, which meals make up a
+  day, and the words it uses for meals, diets and allergens. Changes apply to the planner and to
+  every recipe page when you press <strong>Save</strong>.
+</p>
+
+<form method="post" action="{{ url_for('planner_save') }}">
+  <div class="card">
+    <h3>Starting targets</h3>
+    <div class="grid three">
+      <div class="field">
+        <label for="default_calories">Calories</label>
+        <input type="number" id="default_calories" name="default_calories" value="{{ planner.defaults.calories }}">
+      </div>
+      <div class="field">
+        <label for="default_protein">Protein (g)</label>
+        <input type="number" id="default_protein" name="default_protein" value="{{ planner.defaults.protein }}">
+      </div>
+      <div class="field">
+        <label for="default_meals">Meals a day</label>
+        <input type="number" id="default_meals" name="default_meals" value="{{ planner.defaults.meals }}">
+      </div>
+    </div>
+    <div class="field">
+      <label for="default_diet">Way of eating</label>
+      <select id="default_diet" name="default_diet">
+        {% for diet in planner.diets %}
+        <option value="{{ diet.key }}" {% if diet.key == planner.defaults.diet %}selected{% endif %}>{{ diet.label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Slider ranges</h3>
+    <div class="grid three">
+      <div class="field">
+        <label>Calories</label>
+        <div class="grid two">
+          <input type="number" name="limit_calories_min" value="{{ planner.limits.calories[0] }}" aria-label="Calories minimum">
+          <input type="number" name="limit_calories_max" value="{{ planner.limits.calories[1] }}" aria-label="Calories maximum">
+        </div>
+        <div class="small">Smallest and largest the slider offers.</div>
+      </div>
+      <div class="field">
+        <label>Protein (g)</label>
+        <div class="grid two">
+          <input type="number" name="limit_protein_min" value="{{ planner.limits.protein[0] }}" aria-label="Protein minimum">
+          <input type="number" name="limit_protein_max" value="{{ planner.limits.protein[1] }}" aria-label="Protein maximum">
+        </div>
+        <div class="small">Smallest and largest the slider offers.</div>
+      </div>
+      <div class="field">
+        <label>Meals a day</label>
+        <div class="grid two">
+          <input type="number" name="limit_meals_min" value="{{ planner.limits.meals[0] }}" aria-label="Meals minimum">
+          <input type="number" name="limit_meals_max" value="{{ planner.limits.meals[1] }}" aria-label="Meals maximum">
+        </div>
+        <div class="small">Smallest and largest the buttons offer.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>What a day looks like</h3>
+    <div class="field">
+      <label for="meal_counts">One line per number of meals</label>
+      <textarea id="meal_counts" name="meal_counts" rows="6">{% for count, meals in planner.meal_counts.items() %}{{ count }}: {{ meals | join(', ') }}
+{% endfor %}</textarea>
+      <div class="small">For example <code>4: breakfast, snack, lunch, dinner</code>. Snacks may repeat; main meals never do.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>The meals</h3>
+    {% for key, label in planner.slots.items() %}
+    <div class="row" data-filled="yes">
+      <div class="grid two">
+        <div class="field">
+          <label>Key</label>
+          <input type="text" name="slot_key" value="{{ key }}">
+        </div>
+        <div class="field">
+          <label>Name on screen</label>
+          <input type="text" name="slot_label" value="{{ label }}">
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <button type="button" class="addrow" data-add="slot">+ Add a meal</button>
+    <div class="small">Recipes are filed under these meals, so changing a key means changing those recipes too.</div>
+  </div>
+
+  <div class="card">
+    <h3>Ways of eating</h3>
+    <div class="small" style="margin:-6px 0 12px">Most restrictive first — a recipe fits every diet to its right.</div>
+    {% for diet in planner.diets %}
+    <div class="row" data-filled="yes">
+      <div class="grid three">
+        <div class="field">
+          <label>Key</label>
+          <input type="text" name="diet_key" value="{{ diet.key }}">
+        </div>
+        <div class="field">
+          <label>Name on screen</label>
+          <input type="text" name="diet_label" value="{{ diet.label }}">
+        </div>
+        <div class="field">
+          <label>Description</label>
+          <input type="text" name="diet_description" value="{{ diet.description }}">
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <button type="button" class="addrow" data-add="diet">+ Add a way of eating</button>
+  </div>
+
+  <div class="card">
+    <h3>Allergens</h3>
+    {% for allergen in planner.allergens %}
+    <div class="row" data-filled="yes">
+      <div class="grid two">
+        <div class="field">
+          <label>Key</label>
+          <input type="text" name="allergen_key" value="{{ allergen.key }}">
+        </div>
+        <div class="field">
+          <label>Name on screen</label>
+          <input type="text" name="allergen_label" value="{{ allergen.label }}">
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+    <button type="button" class="addrow" data-add="allergen">+ Add an allergen</button>
+  </div>
+
+  <div class="card">
+    <h3>Featured on the home page</h3>
+    <div class="field">
+      <select name="featured" multiple size="8">
+        {% for recipe in recipes %}
+        <option value="{{ recipe.slug }}" {% if recipe.slug in (planner.featured or []) %}selected{% endif %}>
+          {{ recipe.title }} — {{ recipe.slot }}
+        </option>
+        {% endfor %}
+      </select>
+      <div class="small">Hold Ctrl (or Cmd on a Mac) to pick more than one. Leave none selected for no featured row.</div>
+    </div>
+  </div>
+
+  <div class="bar">
+    <div class="inner">
+      <button class="btn publish" type="submit">Save</button>
+      <a class="preview" href="{{ site_link }}" target="_blank" rel="noopener">See the site &rarr;</a>
+    </div>
+  </div>
+</form>
+
+<template id="tpl-slot">
+  <div class="row" data-filled="no">
+    <div class="grid two">
+      <div class="field"><label>Key</label><input type="text" name="slot_key" value="" placeholder="brunch"></div>
+      <div class="field"><label>Name on screen</label><input type="text" name="slot_label" value="" placeholder="Brunch"></div>
+    </div>
+  </div>
+</template>
+<template id="tpl-diet">
+  <div class="row" data-filled="no">
+    <div class="grid three">
+      <div class="field"><label>Key</label><input type="text" name="diet_key" value="" placeholder="halal"></div>
+      <div class="field"><label>Name on screen</label><input type="text" name="diet_label" value="" placeholder="Halal"></div>
+      <div class="field"><label>Description</label><input type="text" name="diet_description" value=""></div>
+    </div>
+  </div>
+</template>
+<template id="tpl-allergen">
+  <div class="row" data-filled="no">
+    <div class="grid two">
+      <div class="field"><label>Key</label><input type="text" name="allergen_key" value="" placeholder="mustard"></div>
+      <div class="field"><label>Name on screen</label><input type="text" name="allergen_label" value="" placeholder="Mustard"></div>
+    </div>
+  </div>
+</template>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const tpl = { slot: 'tpl-slot', diet: 'tpl-diet', allergen: 'tpl-allergen' };
+document.addEventListener('click', event => {
+  const add = event.target.closest('[data-add]');
+  if (!add) return;
+  const node = document.getElementById(tpl[add.dataset.add]).content.cloneNode(true);
+  add.parentElement.insertBefore(node, add);
+  const first = add.previousElementSibling.querySelector('input');
+  if (first) first.focus();
+});
+</script>
+{% endblock %}

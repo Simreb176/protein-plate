@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex">
+<title>{% block title %}Edit Protein Plate{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='editor.css') }}">
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1><a href="{{ url_for('home') }}">Edit Protein Plate</a></h1>
+    <nav class="site" aria-label="Editing pages">
+      <a href="{{ url_for('home') }}" {% if page == 'site' %}aria-current="page"{% endif %}>Site</a>
+      <a href="{{ url_for('planner_page') }}" {% if page == 'planner' %}aria-current="page"{% endif %}>Planner</a>
+      <a href="{{ url_for('recipes_page') }}" {% if page == 'recipes' %}aria-current="page"{% endif %}>Recipes ({{ recipe_count }})</a>
+      <a href="{{ site_link }}" target="_blank" rel="noopener">The site</a>
+    </nav>
+  </header>
+
+  {% for category, message in get_flashed_messages(with_categories=true) %}
+  <div class="msg {{ 'good' if category == 'good' else 'bad' if category == 'bad' else 'warn' }}">{{ message }}</div>
+  {% endfor %}
+
+  {% block content %}{% endblock %}
+</div>
+{% block scripts %}{% endblock %}
+</body>
+</html>

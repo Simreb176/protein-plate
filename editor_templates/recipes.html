@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Recipes &middot; Edit Protein Plate{% endblock %}
+
+{% block content %}
+<p class="howto">
+  Every recipe the planner can choose from. Adding one puts it on the shelf straight away — the
+  counts on the site (the recipe total, the day's options) update themselves when the page is
+  rebuilt.
+</p>
+
+<div class="section-head">
+  <h2 class="heading">Recipes <span class="small" style="font-weight:400">({{ recipes|length }})</span></h2>
+  <a class="btn primary small" href="{{ url_for('recipe_new') }}">Add a recipe</a>
+</div>
+
+{% if recipes %}
+<div class="field">
+  <input type="text" id="filter" placeholder="Type to filter by name, meal or diet…">
+</div>
+
+<div class="post-list" id="recipe-list">
+  {% for recipe in recipes %}
+  <div class="post-item" data-search="{{ (recipe.title ~ ' ' ~ recipe.slot ~ ' ' ~ recipe.diet ~ ' ' ~ (recipe.tags|join(' '))) | lower }}">
+    <div class="body">
+      <h3>{{ recipe.title }}</h3>
+      <time>{{ recipe.slot }} &middot; {{ recipe.diet }} &middot; {{ recipe.protein }} g protein &middot; {{ recipe.calories }} kcal &middot; {{ recipe.minutes }} min</time>
+      <p class="excerpt">{{ recipe.ingredients[0] if recipe.ingredients else '' }}{% if recipe.ingredients|length > 1 %} and {{ recipe.ingredients|length - 1 }} more{% endif %}</p>
+    </div>
+    <div class="actions">
+      <a class="btn ghost small" href="{{ url_for('recipe_edit', slug=recipe.slug) }}">Edit</a>
+      <form method="post" action="{{ url_for('recipe_delete') }}" data-title="{{ recipe.title }}">
+        <input type="hidden" name="slug" value="{{ recipe.slug }}">
+        <button type="submit" class="danger">Delete</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+<p class="post-list-empty" id="no-matches" hidden>Nothing matches that.</p>
+{% else %}
+<p class="post-list-empty">No recipes yet. <a href="{{ url_for('recipe_new') }}">Add the first one</a>.</p>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.querySelectorAll('form[data-title]').forEach(form => {
+  form.addEventListener('submit', event => {
+    const message = 'Delete \u201c' + form.dataset.title + '\u201d?\n\nIts page disappears from the site when the page rebuilds.';
+    if (!confirm(message)) event.preventDefault();
+  });
+});
+
+const filter = document.getElementById('filter');
+if (filter) {
+  filter.addEventListener('input', () => {
+    const needle = filter.value.trim().toLowerCase();
+    let shown = 0;
+    document.querySelectorAll('#recipe-list .post-item').forEach(item => {
+      const match = !needle || item.dataset.search.includes(needle);
+      item.hidden = !match;
+      if (match) shown += 1;
+    });
+    const none = document.getElementById('no-matches');
+    if (none) none.hidden = shown > 0;
+  });
+}
+</script>
+{% endblock %}

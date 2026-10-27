@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}Site settings &middot; Edit Protein Plate{% endblock %}
+
+{% block content %}
+<p class="howto">
+  These are the words around the site. Press <strong>Save</strong> and the site at
+  <a href="{{ site_link }}" target="_blank" rel="noopener">:9002</a> is rebuilt straight away.
+</p>
+
+<form method="post" action="{{ url_for('site_save') }}">
+  <div class="card">
+    <h3>The site</h3>
+    <div class="field">
+      <label for="title">Site name</label>
+      <input type="text" id="title" name="title" value="{{ site.title or '' }}">
+    </div>
+    <div class="field">
+      <label for="description">One-line description</label>
+      <input type="text" id="description" name="description" value="{{ site.description or '' }}">
+    </div>
+    <div class="field">
+      <label for="url">Web address (used in shared links)</label>
+      <input type="text" id="url" name="url" value="{{ site.url or '' }}">
+    </div>
+    <div class="field">
+      <label for="seo_description">What search engines and shared links say</label>
+      <textarea id="seo_description" name="seo_description">{{ site.seo.description or '' }}</textarea>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Author</h3>
+    <div class="grid two">
+      <div class="field">
+        <label for="author_name">Name</label>
+        <input type="text" id="author_name" name="author_name" value="{{ site.author.name or '' }}">
+      </div>
+      <div class="field">
+        <label for="author_location">Location</label>
+        <input type="text" id="author_location" name="author_location" value="{{ site.author.location or '' }}">
+      </div>
+    </div>
+    <div class="field">
+      <label for="author_tagline">Tagline</label>
+      <input type="text" id="author_tagline" name="author_tagline" value="{{ site.author.tagline or '' }}">
+    </div>
+    <div class="field">
+      <label for="author_email">Email</label>
+      <input type="text" id="author_email" name="author_email" value="{{ site.author.email or '' }}">
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Social links</h3>
+    <div class="grid three">
+      <div class="field">
+        <label for="social_github">GitHub</label>
+        <input type="text" id="social_github" name="social_github" value="{{ site.social.github or '' }}">
+      </div>
+      <div class="field">
+        <label for="social_instagram">Instagram</label>
+        <input type="text" id="social_instagram" name="social_instagram" value="{{ site.social.instagram or '' }}">
+      </div>
+      <div class="field">
+        <label for="social_twitter">X / Twitter</label>
+        <input type="text" id="social_twitter" name="social_twitter" value="{{ site.social.twitter or '' }}">
+      </div>
+    </div>
+    <div class="small">Leave one empty and it simply won't be shown.</div>
+  </div>
+
+  <div class="bar">
+    <div class="inner">
+      <button class="btn publish" type="submit">Save</button>
+      <a class="preview" href="{{ site_link }}" target="_blank" rel="noopener">See the site &rarr;</a>
+    </div>
+  </div>
+</form>
+{% endblock %}
