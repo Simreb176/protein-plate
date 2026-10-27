@@ -45,13 +45,6 @@ story: |
   It is a guide only — always check the labels on what you actually buy,
   especially for sauces, stocks and bread.
 
-  ## Editing it
-
-  The whole site is a folder of text files. Recipes live in one list, the
-  planner's defaults and vocabulary in another, and the look in a single
-  stylesheet. Adding a recipe is a matter of copying a block and changing the
-  words and numbers — the planner picks it up on the next build.
-
 # The closing note. The email address itself comes from the Site screen.
 contact_heading: Say hello
 contact_text: Recipe ideas, corrections, or a meal that came out badly?
