@@ -11,6 +11,7 @@ itself runs in the visitor's browser (see `app.js`), fed by a JSON file this
 script writes from `data/recipes.yml` and `data/planner.yml`, so the recipe
 shelf and the planner rules both stay editable in one place.
 """
+import hashlib
 import json
 import shutil
 from datetime import datetime
@@ -67,6 +68,21 @@ def render_markdown(text):
 def write(path, text):
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(text, encoding="utf-8")
+
+
+def asset_version(names):
+    """A short fingerprint of the static assets.
+
+    The site's CSS and JS are served with a long browser cache. Putting this
+    in the URL (styles.css?v=…) means a change is picked up immediately instead
+    of visitors seeing yesterday's stylesheet for hours.
+    """
+    digest = hashlib.sha256()
+    for name in names:
+        src = ROOT / name
+        if src.exists():
+            digest.update(src.read_bytes())
+    return digest.hexdigest()[:10]
 
 
 def load_recipes(planner):
@@ -140,6 +156,7 @@ def main():
         "planner": planner,
         "recipes": recipes,
         "featured": featured,
+        "asset_version": asset_version(["styles.css", "app.js"]),
         "year": datetime.now().year,
     }
 
