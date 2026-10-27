@@ -1,0 +1,57 @@
+# The words on the How it works page.
+#
+# `story` is Markdown: leave a blank line between paragraphs, use `## Heading`
+# for a section, `- ` for a bullet, `1. ` for a numbered list, and **bold** or
+# [links](https://example.com) where you want them. `{recipes}` is replaced
+# with the number of recipes on the shelf, so the count never goes stale.
+
+eyebrow: How it works
+heading: Honest food, sensible maths
+subtitle: No account, no tracking, no supplement pitches. Set a target, get a day, cook it.
+
+story: |
+  ## What it does
+
+  You tell the planner roughly how many calories and how much protein you're
+  after, how many times a day you like to eat, and anything you'd rather not
+  eat. It then picks one meal for each slot from {recipes} recipes, aiming for
+  your targets without going wildly over or under.
+
+  It's a starting point, not a prescription. Portion sizes are per serving and
+  the numbers are sensible estimates, not lab results.
+
+  ## The numbers
+
+  - **Protein target.** A common guide for people training is roughly 1.6–2.2 g
+    of protein per kilo of body weight per day. For most adults that lands
+    somewhere between 100 g and 180 g.
+  - **Calories.** If you're maintaining weight, your target is roughly what you
+    burn. For fat loss, a deficit of 300–500 kcal is typical.
+  - **Macros on each recipe** are per serving. Protein and carbs are 4 kcal per
+    gram, fat is 9 — the little coloured bar shows that split.
+
+  ## How meals are chosen
+
+  1. Recipes are filtered by your diet and anything you've asked to avoid.
+  2. Each slot (breakfast, lunch, dinner, snack) is filled separately, so you
+     never get three dinners.
+  3. The planner tries many combinations and keeps the one closest to your
+     calorie and protein targets, favouring variety over repeats.
+  4. Don't like a meal? Swap it. Want a different day? Shuffle.
+
+  ## Allergens
+
+  Recipes list the common allergens they contain, and the filter will hide them.
+  It is a guide only — always check the labels on what you actually buy,
+  especially for sauces, stocks and bread.
+
+  ## Editing it
+
+  The whole site is a folder of text files. Recipes live in one list, the
+  planner's defaults and vocabulary in another, and the look in a single
+  stylesheet. Adding a recipe is a matter of copying a block and changing the
+  words and numbers — the planner picks it up on the next build.
+
+# The closing note. The email address itself comes from the Site screen.
+contact_heading: Say hello
+contact_text: Recipe ideas, corrections, or a meal that came out badly?

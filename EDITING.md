@@ -10,18 +10,21 @@ There's a page for changing everything yourself, at:
 
 **http://simon-dev.rebecchi.uk:9003**
 
-No password — it's only reachable from your own devices. It has three screens:
+No password — it's only reachable from your own devices. It has four screens:
 
 - **Recipes** — the whole shelf: add a recipe, edit one, delete one. Adding a
   recipe puts it on the site straight away; the counts and the planner pick it
   up by themselves.
 - **Planner** — the starting calorie/protein/meal targets, the slider ranges,
   which meals make up a day, and the words used for meals, diets and allergens.
+- **How it works** — every word on the How it works page: the title, the intro,
+  the body and the closing note.
 - **Site** — the site's name, description, contact details and social links.
 
-Press **Save** and the site at **:9002** is rebuilt immediately. There's no
-publish step for this site: it only exists on your own machine, so saving *is*
-going live. Every save is also committed, so any change can be undone.
+Press **Save** and the copy on this machine at **:9002** is rebuilt immediately,
+and the change is committed so it can be undone. The public site at
+**proteinplate.co.uk** updates when the change is pushed to GitHub — ask the
+assistant to publish it, or it goes up with the next push.
 
 ## The other way: just ask
 
@@ -35,7 +38,7 @@ Open the assistant in this folder and say what you'd like:
 The assistant edits the files, rebuilds the site and gives you a link to look
 at.
 
-## The three content files
+## The four content files
 
 Everything the site says comes from `data/`:
 
@@ -43,6 +46,7 @@ Everything the site says comes from `data/`:
 |------|---------------|
 | `data/recipes.yml` | The recipe shelf — every meal the planner can choose |
 | `data/planner.yml` | Defaults, slider ranges, meal patterns, diets and allergens |
+| `data/about.yml` | The words on the How it works page |
 | `data/site.yml` | Site name, description, email and social links |
 
 YAML is just lists of `key: value` pairs. Indentation matters: items that line
@@ -87,6 +91,21 @@ Open `data/planner.yml`:
 - **`diets`** and **`allergens`** — the vocabulary used by the filter and by
   every recipe. If you add one here, recipes can start using it.
 - **`featured`** — the recipes shown on the home page (use their slugs).
+
+## Changing the How it works page
+
+Open the **How it works** screen in the editing page, or edit `data/about.yml`.
+The top fields are the small line above the title, the title and the line under
+it. The body is ordinary text with a little **Markdown**:
+
+- leave a blank line between paragraphs;
+- `## A heading` starts a new section;
+- `- ` makes a bullet and `1. ` makes a numbered list;
+- `**bold**` and `[links](https://example.com)` work;
+- `{recipes}` is swapped for the number of recipes on the shelf, so leave it in
+  if you mention the count.
+
+The closing note's email address comes from the **Site** screen, not this one.
 
 ## Changing how it looks
 

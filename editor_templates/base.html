@@ -15,6 +15,7 @@
     <nav class="site" aria-label="Editing pages">
       <a href="{{ url_for('home') }}" {% if page == 'site' %}aria-current="page"{% endif %}>Site</a>
       <a href="{{ url_for('planner_page') }}" {% if page == 'planner' %}aria-current="page"{% endif %}>Planner</a>
+      <a href="{{ url_for('about_page') }}" {% if page == 'about' %}aria-current="page"{% endif %}>How it works</a>
       <a href="{{ url_for('recipes_page') }}" {% if page == 'recipes' %}aria-current="page"{% endif %}>Recipes ({{ recipe_count }})</a>
       <a href="{{ site_link }}" target="_blank" rel="noopener">The site</a>
     </nav>

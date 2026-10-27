@@ -11,6 +11,7 @@ lot.
 ```
 data/site.yml       site title, description, contact details, SEO
 data/planner.yml    generator defaults, ranges, meal patterns, diets, allergens
+data/about.yml      the words on the How it works page
 data/recipes.yml    the recipe shelf (the only file you need to add recipes)
 templates/*.html    Jinja2 layouts — base, planner, recipes, recipe, about
 styles.css          all the styling; section 1 holds every design token
@@ -89,12 +90,13 @@ make deploy-editor                                 # install + start the service
   follow on the next build.
 - **Planner** — defaults, slider ranges, meal patterns, meals, diets, allergens
   and the featured recipes.
+- **How it works** — the title, intro, body and closing note on the about page.
 - **Site** — the site's own words.
-- Saving rebuilds `docs/` and makes a local commit. There is no remote here, so
-  there is no push.
+- Saving rebuilds `docs/` and makes a local commit. It does not push, so the
+  public site updates on the next push to `main`.
 - Recipes are re-emitted by a hand-rolled writer that matches the hand-written
-  file byte for byte; `site.yml` / `planner.yml` use ruamel in round-trip mode,
-  where a no-op save must produce no diff.
+  file byte for byte; `site.yml` / `planner.yml` / `about.yml` use ruamel in
+  round-trip mode, where a no-op save must produce no diff.
 
 ## Publishing
 

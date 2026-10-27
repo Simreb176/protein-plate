@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}How it works &middot; Edit Protein Plate{% endblock %}
+
+{% block content %}
+<p class="howto">
+  These are the words on the <strong>How it works</strong> page only. Press
+  <strong>Save</strong> and the copy at
+  <a href="{{ site_link }}about.html" target="_blank" rel="noopener">:9002</a>
+  is rebuilt straight away.
+</p>
+
+<form method="post" action="{{ url_for('about_save') }}">
+  <div class="card">
+    <h3>The top of the page</h3>
+    <div class="field">
+      <label for="eyebrow">The small line above the title</label>
+      <input type="text" id="eyebrow" name="eyebrow" value="{{ about.eyebrow or '' }}">
+    </div>
+    <div class="field">
+      <label for="heading">The title</label>
+      <input type="text" id="heading" name="heading" value="{{ about.heading or '' }}">
+    </div>
+    <div class="field">
+      <label for="subtitle">The line under the title</label>
+      <input type="text" id="subtitle" name="subtitle" value="{{ about.subtitle or '' }}">
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>The page itself</h3>
+    <div class="field">
+      <label for="story">The words</label>
+      <textarea class="prose" id="story" name="story">{{ about.story or '' }}</textarea>
+      <div class="small">
+        Leave a blank line between paragraphs. Use <code>## A heading</code> for a
+        section, <code>- </code> for a bullet, <code>1. </code> for a numbered
+        list, <code>**bold**</code>, and
+        <code>[links](https://example.com)</code>.
+        <code>{recipes}</code> is replaced with the number of recipes on the shelf.
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>The closing note</h3>
+    <div class="field">
+      <label for="contact_heading">Heading</label>
+      <input type="text" id="contact_heading" name="contact_heading" value="{{ about.contact_heading or '' }}">
+    </div>
+    <div class="field">
+      <label for="contact_text">Text before the email address</label>
+      <input type="text" id="contact_text" name="contact_text" value="{{ about.contact_text or '' }}">
+    </div>
+    <div class="small">
+      The email address itself comes from the <a href="{{ url_for('home') }}">Site</a> screen.
+      Leave the heading empty to hide this section.
+    </div>
+  </div>
+
+  <div class="bar">
+    <div class="inner">
+      <button class="btn publish" type="submit">Save</button>
+      <a class="preview" href="{{ site_link }}about.html" target="_blank" rel="noopener">See the page &rarr;</a>
+    </div>
+  </div>
+</form>
+{% endblock %}

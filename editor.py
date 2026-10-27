@@ -7,9 +7,10 @@ Change the site's words and the recipe shelf from a browser, with no YAML:
     # then open http://simon-dev.rebecchi.uk:9003
 
 Screens:
-    Site      the name, description, contact details and social links
-    Planner   defaults, slider ranges, meal patterns, diets, allergens, featured
-    Recipes   the shelf: add, edit and remove recipes
+    Site           the name, description, contact details and social links
+    Planner        defaults, slider ranges, meal patterns, diets, allergens, featured
+    How it works   the words on the about page
+    Recipes        the shelf: add, edit and remove recipes
 
 Everything is written back to `data/*.yml`, the site is rebuilt, and the change
 is committed locally — so the page at :9002 is up to date straight away and
@@ -37,6 +38,7 @@ import yaml
 from flask import Flask, flash, redirect, render_template, request, url_for
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap, CommentedSeq
+from ruamel.yaml.scalarstring import LiteralScalarString
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
@@ -311,6 +313,28 @@ def _merge_rows(existing, rows, key):
     return merged
 
 
+def save_about(form):
+    """The How it works page. Nothing is written when nothing changed."""
+    about = load_map(DATA / "about.yml")
+
+    fields = ("eyebrow", "heading", "subtitle", "contact_heading", "contact_text")
+    values = {key: normalise(form.get(key)).strip() for key in fields}
+    story = normalise(form.get("story")).strip("\n")
+
+    changed = any(not same(about.get(key), value) for key, value in values.items())
+    story_changed = not same(about.get("story"), story)
+
+    if not changed and not story_changed:
+        return
+
+    for key, value in values.items():
+        set_value(about, key, value)
+    if story_changed:
+        about["story"] = LiteralScalarString(story + "\n") if story else ""
+
+    dump(DATA / "about.yml", about)
+
+
 def save_recipe(form, original_slug):
     planner = load_map(DATA / "planner.yml")
     recipes = load_recipes()
@@ -484,6 +508,29 @@ def planner_save():
         return redirect(url_for("planner_page"))
     after_save("Saved the planner settings.")
     return redirect(url_for("planner_page"))
+
+
+# --------------------------------------------------------------------------
+# How it works
+# --------------------------------------------------------------------------
+@app.get("/about")
+def about_page():
+    return render_template(
+        "about_edit.html",
+        about=load_map(DATA / "about.yml"),
+        page="about",
+    )
+
+
+@app.post("/about/save")
+def about_save():
+    try:
+        save_about(request.form)
+    except EditorError as error:
+        flash(str(error), "bad")
+        return redirect(url_for("about_page"))
+    after_save("Saved the How it works page.")
+    return redirect(url_for("about_page"))
 
 
 # --------------------------------------------------------------------------

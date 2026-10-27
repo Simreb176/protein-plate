@@ -1,6 +1,6 @@
 {% extends "base.html" %}
-{% block title %}How it works &middot; {{ site.title }}{% endblock %}
-{% block description %}How the Protein Plate meal generator picks your meals, and what the numbers mean.{% endblock %}
+{% block title %}{{ about.heading }} &middot; {{ site.title }}{% endblock %}
+{% block description %}{{ about.subtitle }}{% endblock %}
 {% block og_path %}about.html{% endblock %}
 {% block canonical_path %}about.html{% endblock %}
 
@@ -8,67 +8,21 @@
 <div class="wrap">
   <div class="wrap-narrow about-page">
     <header class="page-head">
-      <p class="eyebrow">How it works</p>
-      <h1>Honest food, sensible maths</h1>
-      <p>No account, no tracking, no supplement pitches. Set a target, get a day, cook it.</p>
+      <p class="eyebrow">{{ about.eyebrow }}</p>
+      <h1>{{ about.heading }}</h1>
+      {% if about.subtitle %}<p>{{ about.subtitle }}</p>{% endif %}
     </header>
 
     <div class="prose">
-    <h2>What it does</h2>
-    <p>
-      You tell the planner roughly how many calories and how much protein you're
-      after, how many times a day you like to eat, and anything you'd rather not
-      eat. It then picks one meal for each slot from {{ recipes | length }} recipes,
-      aiming for your targets without going wildly over or under.
-    </p>
-    <p>
-      It's a starting point, not a prescription. Portion sizes are per serving and
-      the numbers are sensible estimates, not lab results.
-    </p>
+      {{ about.story | replace('{recipes}', recipes | length | string) | markdown }}
 
-    <h2>The numbers</h2>
-    <ul>
-      <li><strong>Protein target.</strong> A common guide for people training is
-        roughly 1.6–2.2 g of protein per kilo of body weight per day. For most
-        adults that lands somewhere between 100 g and 180 g.</li>
-      <li><strong>Calories.</strong> If you're maintaining weight, your target is
-        roughly what you burn. For fat loss, a deficit of 300–500 kcal is typical.</li>
-      <li><strong>Macros on each recipe</strong> are per serving. Protein and carbs
-        are 4 kcal per gram, fat is 9 — the little coloured bar shows that split.</li>
-    </ul>
-
-    <h2>How meals are chosen</h2>
-    <ol>
-      <li>Recipes are filtered by your diet and anything you've asked to avoid.</li>
-      <li>Each slot (breakfast, lunch, dinner, snack) is filled separately, so you
-        never get three dinners.</li>
-      <li>The planner tries many combinations and keeps the one closest to your
-        calorie and protein targets, favouring variety over repeats.</li>
-      <li>Don't like a meal? Swap it. Want a different day? Shuffle.</li>
-    </ol>
-
-    <h2>Allergens</h2>
-    <p>
-      Recipes list the common allergens they contain, and the filter will hide
-      them. It is a guide only — always check the labels on what you actually buy,
-      especially for sauces, stocks and bread.
-    </p>
-
-    <h2>Editing it</h2>
-    <p>
-      The whole site is a folder of text files. Recipes live in one list, the
-      planner's defaults and vocabulary in another, and the look in a single
-      stylesheet. Adding a recipe is a matter of copying a block and changing the
-      words and numbers — the planner picks it up on the next build.
-    </p>
-
-    {% if site.author.email %}
-    <h2>Say hello</h2>
-    <p>
-      Recipe ideas, corrections, or a meal that came out badly?
-      <a href="mailto:{{ site.author.email }}">{{ site.author.email }}</a>.
-    </p>
-    {% endif %}
+      {% if site.author.email and about.contact_heading %}
+      <h2>{{ about.contact_heading }}</h2>
+      <p>
+        {% if about.contact_text %}{{ about.contact_text }} {% endif %}
+        <a href="mailto:{{ site.author.email }}">{{ site.author.email }}</a>.
+      </p>
+      {% endif %}
     </div>
   </div>
 </div>

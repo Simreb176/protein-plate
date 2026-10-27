@@ -144,6 +144,7 @@ def load_recipes(planner):
 def main():
     site = load_yaml(DATA / "site.yml")
     planner = load_yaml(DATA / "planner.yml")
+    about = load_yaml(DATA / "about.yml")
     recipes = load_recipes(planner)
 
     env = Environment(loader=FileSystemLoader(TEMPLATES), autoescape=True)
@@ -154,6 +155,7 @@ def main():
     context = {
         "site": site,
         "planner": planner,
+        "about": about,
         "recipes": recipes,
         "featured": featured,
         "asset_version": asset_version(["styles.css", "app.js"]),

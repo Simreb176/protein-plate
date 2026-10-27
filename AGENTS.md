@@ -15,14 +15,15 @@ There is no database, no account system and no server-side code at runtime.
 |------|-----------|--------------|
 | `data/site.yml` | Site title, description, contact, social links, SEO | Yes — content |
 | `data/planner.yml` | Defaults, slider ranges, meal patterns, diets, allergens, featured recipes | Yes — behaviour |
+| `data/about.yml` | The words on the How it works page (Markdown) | Yes — content |
 | `data/recipes.yml` | The recipe shelf — one block per recipe | Yes — content |
 | `templates/*.html` | Jinja2 layouts: `base`, `index` (planner), `recipes`, `recipe`, `about` | Yes — layout |
 | `styles.css` | All styling. Section 1 holds every design token | Yes — appearance |
 | `app.js` | The planner: filtering, search, rendering, swaps | Yes — behaviour |
 | `generate.py` | Reads YAML, validates recipes, renders pages, writes `docs/` | Yes — when adding features |
 | `serve.py` | Rebuilds and serves the dev preview on port 8090 | Rarely |
-| `editor.py` | The owner's editing page (Flask) on port 9003: recipes, planner, site | Yes — part of the product |
-| `editor_templates/*.html` | The editing page's screens (`base`, `site_edit`, `planner_edit`, `recipes`, `recipe_form`) | Yes |
+| `editor.py` | The owner's editing page (Flask) on port 9003: recipes, planner, about, site | Yes — part of the product |
+| `editor_templates/*.html` | The editing page's screens (`base`, `site_edit`, `planner_edit`, `about_edit`, `recipes`, `recipe_form`) | Yes |
 | `editor_static/editor.css` | The editing page's stylesheet (not the site's) | Yes |
 | `Makefile` | `build`, `preview`, `deploy`, `status`, `logs`, `edit`, `deploy-editor` | Yes |
 | `deploy/proteinplate.service` | systemd unit for the always-on copy on port 9002 | Yes |
@@ -81,14 +82,17 @@ you can do, and vice versa:
 - **Planner** (`/planner`): defaults, slider ranges, meal patterns, meals,
   diets, allergens, featured recipes. It refuses to save a diet/allergen/meal
   that a recipe still uses rather than breaking the build.
+- **How it works** (`/about`): eyebrow, title, subtitle, the Markdown body and
+  the closing contact note. `{recipes}` in the body becomes the current count.
 - **Site** (`/`): the site's own words.
 - Every save rebuilds and makes a local commit ("Edit from the editing page").
-  There is no remote for this repo, so there is nothing to push.
+  It does **not** push, so the public site updates when `main` is pushed.
 - **Recipes are written by a hand-rolled writer** (`write_recipes` in
   `editor.py`) that reproduces the hand-written file byte for byte — the
   nested ingredient/step lists and the inline `[dairy, gluten]` style depend on
-  it. `site.yml` / `planner.yml` go through ruamel in round-trip mode, and a
-  no-op save must produce no diff. Test both after touching the editor.
+  it. `site.yml` / `planner.yml` / `about.yml` go through ruamel in round-trip
+  mode, and a no-op save must produce no diff — including the block scalar in
+  `about.yml`. Test both after touching the editor.
 - After changing `editor.py`, run `make deploy-editor` — the service runs from
   this working tree and keeps the old code until restarted.
 
