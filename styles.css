@@ -445,6 +445,10 @@ p { text-wrap: pretty; }
   font-size: 0.42em;
   margin-left: 2px;
 }
+.hero-card-number .hero-card-value {
+  font-size: 1em;
+  margin-left: 0;
+}
 .hero-card-caption {
   color: var(--muted);
   font-size: 0.92rem;

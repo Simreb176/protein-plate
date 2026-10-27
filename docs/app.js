@@ -208,6 +208,7 @@ if (typeof document !== "undefined") {
     function refreshOutputs() {
       el("calories-out").textContent = `${caloriesInput.value} kcal`;
       el("protein-out").textContent = `${proteinInput.value} g`;
+      el("hero-protein").textContent = proteinInput.value;
       for (const input of [caloriesInput, proteinInput]) {
         const percent = ((input.value - input.min) / (input.max - input.min)) * 100;
         input.style.setProperty("--fill", `${percent}%`);
