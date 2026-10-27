@@ -1,8 +1,10 @@
 # Protein Plate
 
-A high-protein meal planner, built as a static site from YAML data. Pick a
-calorie and protein target, choose how you eat, and it builds a day from the
-recipe shelf — then lets you swap any meal or shuffle the lot.
+A high-protein meal planner, live at
+**[proteinplate.co.uk](https://proteinplate.co.uk)**, built as a static site
+from YAML data. Pick a calorie and protein target, choose how you eat, and it
+builds a day from the recipe shelf — then lets you swap any meal or shuffle the
+lot.
 
 ## How it works
 
@@ -96,10 +98,16 @@ make deploy-editor                                 # install + start the service
 
 ## Publishing
 
-The site is plain static files, so any static host works. For GitHub Pages,
-push `main` — `.github/workflows/pages.yml` rebuilds and publishes `docs/`.
-To add a custom domain, put it in a `CNAME` file at the repo root (it is copied
-into the build) and point the DNS at GitHub Pages.
+The live site is **https://proteinplate.co.uk**, published by GitHub Actions
+from `main` in
+[Simreb176/protein-plate](https://github.com/Simreb176/protein-plate). The
+workflow rebuilds `docs/` and deploys it; the custom domain comes from the
+`CNAME` file at the repo root.
+
+DNS is proxied through Cloudflare, which also terminates TLS. That means
+GitHub's **Enforce HTTPS** toggle stays unavailable — use Cloudflare's
+**SSL/TLS → Edge Certificates → Always Use HTTPS** if you want `http://` to
+redirect to `https://`.
 
 The always-on copy on this machine runs under systemd:
 

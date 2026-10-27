@@ -108,9 +108,14 @@ make status
 make logs
 ```
 
-To publish publicly, push `main`; GitHub Actions rebuilds and deploys `docs/`.
-If a custom domain is added, put it in `CNAME` at the repo root (it is copied
-into the build).
+To publish publicly, push `main`; GitHub Actions rebuilds and deploys `docs/`
+to **https://proteinplate.co.uk** (repo:
+`git@github.com:Simreb176/protein-plate.git`). The custom domain is in `CNAME`
+at the repo root and copied into the build.
+
+DNS is proxied through Cloudflare, so GitHub's "Enforce HTTPS" toggle stays
+unavailable; HTTPS is terminated by Cloudflare. If `http://` should redirect to
+`https://`, use Cloudflare's **SSL/TLS → Edge Certificates → Always Use HTTPS**.
 
 ## 5. Definition of done
 
