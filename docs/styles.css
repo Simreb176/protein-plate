@@ -181,6 +181,7 @@ p { text-wrap: pretty; }
 }
 .wrap-narrow {
   max-width: var(--wrap-narrow);
+  margin-inline: auto;
 }
 
 .skip-link {
@@ -1187,6 +1188,19 @@ input[type="range"]::-moz-range-thumb {
 }
 
 /* 9. About page --------------------------------------------------------- */
+.about-page {
+  /* The column itself is centred by .wrap-narrow; on a wide screen the page
+     heading joins it in the middle while the paragraphs stay left-aligned. */
+  margin-inline: auto;
+}
+@media (min-width: 960px) {
+  .about-page .page-head {
+    text-align: center;
+  }
+  .about-page .page-head p {
+    margin-inline: auto;
+  }
+}
 .prose {
   font-size: 1.02rem;
 }

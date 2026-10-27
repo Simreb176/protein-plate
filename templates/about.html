@@ -6,13 +6,14 @@
 
 {% block content %}
 <div class="wrap">
-  <header class="page-head">
-    <p class="eyebrow">How it works</p>
-    <h1>Honest food, sensible maths</h1>
-    <p>No account, no tracking, no supplement pitches. Set a target, get a day, cook it.</p>
-  </header>
+  <div class="wrap-narrow about-page">
+    <header class="page-head">
+      <p class="eyebrow">How it works</p>
+      <h1>Honest food, sensible maths</h1>
+      <p>No account, no tracking, no supplement pitches. Set a target, get a day, cook it.</p>
+    </header>
 
-  <div class="prose wrap-narrow">
+    <div class="prose">
     <h2>What it does</h2>
     <p>
       You tell the planner roughly how many calories and how much protein you're
@@ -68,6 +69,7 @@
       <a href="mailto:{{ site.author.email }}">{{ site.author.email }}</a>.
     </p>
     {% endif %}
+    </div>
   </div>
 </div>
 {% endblock %}
