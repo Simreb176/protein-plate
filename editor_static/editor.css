@@ -78,6 +78,17 @@ input:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:1px;ba
 @media (min-width:640px){.grid.two{grid-template-columns:1fr 1fr}.grid.three{grid-template-columns:1fr 1fr 1fr}}
 .small{font-size:.8rem;color:var(--faint);margin-top:4px}
 
+/* Ingredient rows (recipe form) --------------------------------------------- */
+.ingredient-row{display:grid;grid-template-columns:2fr .7fr 1.5fr auto;gap:8px;align-items:start;
+  margin-bottom:8px}
+.ingredient-row select,.ingredient-row input{width:100%}
+.ingredient-row .danger{padding:8px 6px;white-space:nowrap}
+@media (max-width:640px){
+  .ingredient-row{grid-template-columns:1fr 1fr}
+  .ingredient-row .danger{grid-column:2;justify-self:end}
+}
+.nutrition-preview{margin:0;font-size:.96rem;color:var(--ink);font-variant-numeric:tabular-nums}
+
 /* Repeatable rows (the run log) --------------------------------------------- */
 .row{border-top:1px dashed var(--line-strong);padding-top:14px;margin-top:14px;position:relative}
 .row:first-of-type{border-top:0;padding-top:0;margin-top:0}

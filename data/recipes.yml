@@ -10,34 +10,41 @@
 #   diet       omnivore | pescatarian | vegetarian | vegan
 #              (the strictest group it fits — vegan recipes suit everyone)
 #   minutes    hands-on time, roughly
-#   calories   per serving, kcal
-#   protein    per serving, grams
-#   carbs, fat per serving, grams
+#   servings   how many servings the ingredient amounts make
 #   allergens  any of: dairy, gluten, eggs, fish, shellfish, soy, nuts, sesame
 #   tags       short labels shown on the card (free text)
-#   ingredients  one line per ingredient
+#   ingredients  one row per ingredient: food (a key in foods.yml), grams,
+#                and an optional label for the website
 #   steps      one line per step
 #   note       optional serving suggestion
+#
+# Calories, protein, carbs, fat and fibre are calculated at build time from
+# data/foods.yml (CoFID 2021). Don't type them in here.
 
 - slug: greek-yoghurt-berry-bowl
   title: Greek Yoghurt Berry Bowl
   slot: breakfast
   diet: vegetarian
   minutes: 5
-  calories: 420
-  protein: 34
-  carbs: 40
-  fat: 12
+  servings: 1
   allergens: [dairy]
   tags: [no-cook, quick]
   ingredients:
-    - 300 g 0% Greek yoghurt
-    - 80 g mixed berries
-    - 40 g granola
-    - 1 tsp honey
+  - food: greek-yoghurt-0
+    grams: 300
+    label: 300 g 0% Greek yoghurt
+  - food: mixed-berries
+    grams: 80
+    label: 80 g mixed berries
+  - food: granola
+    grams: 40
+    label: 40 g granola
+  - food: honey
+    grams: 7
+    label: 1 tsp honey
   steps:
-    - Spoon the yoghurt into a bowl and swirl through half the berries.
-    - Top with the rest of the berries and the granola, then drizzle with honey.
+  - Spoon the yoghurt into a bowl and swirl through half the berries.
+  - Top with the rest of the berries and the granola, then drizzle with honey.
   note: Add a spoon of peanut butter if you need the extra calories.
 
 - slug: smoked-salmon-scrambled-eggs
@@ -45,936 +52,1269 @@
   slot: breakfast
   diet: pescatarian
   minutes: 10
-  calories: 460
-  protein: 38
-  carbs: 4
-  fat: 32
+  servings: 1
   allergens: [dairy, eggs, fish]
   tags: [quick, high-protein]
   ingredients:
-    - 3 eggs
-    - 60 g smoked salmon
-    - 20 g butter
-    - 1 tbsp crème fraîche
-    - 1 slice rye bread (optional)
+  - food: eggs
+    grams: 150
+    label: 3 eggs
+  - food: smoked-salmon
+    grams: 60
+    label: 60 g smoked salmon
+  - food: butter
+    grams: 20
+    label: 20 g butter
+  - food: creme-fraiche
+    grams: 15
+    label: 1 tbsp crème fraîche
+  - food: rye-bread
+    grams: 35
+    label: 1 slice rye bread (optional)
   steps:
-    - Beat the eggs with a pinch of salt and pepper.
-    - Melt the butter in a pan over a low heat, add the eggs and stir slowly until just set.
-    - Fold through the crème fraîche and smoked salmon off the heat. Serve with the rye toast if you like.
+  - Beat the eggs with a pinch of salt and pepper.
+  - Melt the butter in a pan over a low heat, add the eggs and stir slowly until just set.
+  - Fold through the crème fraîche and smoked salmon off the heat. Serve with the rye toast if you like.
 
 - slug: overnight-oats-whey
   title: Overnight Oats with Whey
   slot: breakfast
   diet: vegetarian
   minutes: 5
-  calories: 480
-  protein: 36
-  carbs: 55
-  fat: 13
+  servings: 1
   allergens: [dairy, gluten]
   tags: [make-ahead, no-cook]
   ingredients:
-    - 60 g rolled oats
-    - 200 ml semi-skimmed milk
-    - 1 scoop (30 g) whey protein
-    - 1 tbsp chia seeds
-    - 60 g raspberries
+  - food: oats
+    grams: 60
+    label: 60 g rolled oats
+  - food: milk-semi
+    grams: 200
+    label: 200 ml semi-skimmed milk
+  - food: whey-protein
+    grams: 30
+    label: 1 scoop (30 g) whey protein
+  - food: chia-seeds
+    grams: 12
+    label: 1 tbsp chia seeds
+  - food: raspberries
+    grams: 60
+    label: 60 g raspberries
   steps:
-    - Stir the oats, milk, protein powder and chia together in a jar.
-    - Seal and leave in the fridge overnight.
-    - Top with the raspberries before eating.
+  - Stir the oats, milk, protein powder and chia together in a jar.
+  - Seal and leave in the fridge overnight.
+  - Top with the raspberries before eating.
 
 - slug: tofu-scramble-sourdough
   title: Tofu Scramble on Sourdough
   slot: breakfast
   diet: vegan
   minutes: 15
-  calories: 430
-  protein: 27
-  carbs: 35
-  fat: 20
+  servings: 1
   allergens: [soy, gluten]
   tags: [quick]
   ingredients:
-    - 180 g firm tofu, crumbled
-    - 1/2 tsp turmeric
-    - 1/2 tsp smoked paprika
-    - 1 tbsp olive oil
-    - 2 slices sourdough
-    - Handful of spinach
+  - food: tofu
+    grams: 180
+    label: 180 g firm tofu, crumbled
+  - food: turmeric
+    grams: 1.5
+    label: 1/2 tsp turmeric
+  - food: paprika
+    grams: 1.2
+    label: 1/2 tsp smoked paprika
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: sourdough
+    grams: 80
+    label: 2 slices sourdough
+  - food: spinach
+    grams: 30
+    label: Handful of spinach
   steps:
-    - Heat the oil and soften the spinach for a minute.
-    - Add the crumbled tofu, turmeric and paprika and cook for 5 minutes, stirring.
-    - Season well and pile onto toasted sourdough.
+  - Heat the oil and soften the spinach for a minute.
+  - Add the crumbled tofu, turmeric and paprika and cook for 5 minutes, stirring.
+  - Season well and pile onto toasted sourdough.
 
 - slug: cottage-cheese-pancakes
   title: Cottage Cheese Pancakes
   slot: breakfast
   diet: vegetarian
   minutes: 15
-  calories: 440
-  protein: 33
-  carbs: 45
-  fat: 14
+  servings: 1
   allergens: [dairy, eggs, gluten]
   tags: [weekend]
   ingredients:
-    - 150 g cottage cheese
-    - 2 eggs
-    - 50 g plain flour
-    - 1 tsp baking powder
-    - 1 tsp oil
-    - 100 g blueberries
+  - food: cottage-cheese
+    grams: 150
+    label: 150 g cottage cheese
+  - food: eggs
+    grams: 100
+    label: 2 eggs
+  - food: plain-flour
+    grams: 50
+    label: 50 g plain flour
+  - food: baking-powder
+    grams: 4
+    label: 1 tsp baking powder
+  - food: vegetable-oil
+    grams: 4.5
+    label: 1 tsp oil
+  - food: blueberries
+    grams: 100
+    label: 100 g blueberries
   steps:
-    - Whizz the cottage cheese and eggs together, then fold in the flour and baking powder.
-    - Cook small pancakes in a lightly oiled pan for 2 minutes a side.
-    - Serve with the blueberries.
+  - Whizz the cottage cheese and eggs together, then fold in the flour and baking powder.
+  - Cook small pancakes in a lightly oiled pan for 2 minutes a side.
+  - Serve with the blueberries.
 
 - slug: full-english-plate
   title: The High-Protein Full English
   slot: breakfast
   diet: omnivore
   minutes: 20
-  calories: 560
-  protein: 42
-  carbs: 28
-  fat: 30
+  servings: 1
   allergens: [eggs]
   tags: [weekend, high-protein]
   ingredients:
-    - 2 eggs
-    - 2 turkey sausages
-    - 120 g baked beans
-    - 100 g mushrooms
-    - 1 slice wholemeal toast
-    - 1 tsp oil
+  - food: eggs
+    grams: 100
+    label: 2 eggs
+  - food: turkey-sausages
+    grams: 120
+    label: 2 turkey sausages
+  - food: baked-beans
+    grams: 120
+    label: 120 g baked beans
+  - food: mushrooms
+    grams: 100
+    label: 100 g mushrooms
+  - food: wholemeal-bread
+    grams: 40
+    label: 1 slice wholemeal toast
+  - food: vegetable-oil
+    grams: 4.5
+    label: 1 tsp oil
   steps:
-    - Grill the sausages until cooked through.
-    - Fry the mushrooms in the oil, then fry the eggs to your liking.
-    - Warm the beans and serve everything with the toast.
+  - Grill the sausages until cooked through.
+  - Fry the mushrooms in the oil, then fry the eggs to your liking.
+  - Warm the beans and serve everything with the toast.
 
 - slug: shakshuka-with-feta
   title: Shakshuka with Feta
   slot: breakfast
   diet: vegetarian
   minutes: 25
-  calories: 450
-  protein: 28
-  carbs: 30
-  fat: 24
+  servings: 1
   allergens: [dairy, eggs]
   tags: [one-pan]
   ingredients:
-    - 1 tin chopped tomatoes
-    - 1/2 onion, sliced
-    - 1 red pepper, sliced
-    - 1 tsp cumin
-    - 3 eggs
-    - 40 g feta
-    - 1 tbsp olive oil
+  - food: chopped-tomatoes
+    grams: 400
+    label: 1 tin chopped tomatoes
+  - food: onion
+    grams: 60
+    label: 1/2 onion, sliced
+  - food: red-pepper
+    grams: 150
+    label: 1 red pepper, sliced
+  - food: cumin
+    grams: 2.1
+    label: 1 tsp cumin
+  - food: eggs
+    grams: 150
+    label: 3 eggs
+  - food: feta
+    grams: 40
+    label: 40 g feta
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
   steps:
-    - Soften the onion and pepper in the oil for 8 minutes.
-    - Add the cumin and tomatoes and simmer for 10 minutes.
-    - Make three wells, crack in the eggs, scatter over the feta and cover until the whites are set.
+  - Soften the onion and pepper in the oil for 8 minutes.
+  - Add the cumin and tomatoes and simmer for 10 minutes.
+  - Make three wells, crack in the eggs, scatter over the feta and cover until the whites are set.
 
 - slug: peanut-banana-smoothie
   title: Peanut Butter Banana Smoothie
   slot: breakfast
   diet: vegan
   minutes: 5
-  calories: 520
-  protein: 32
-  carbs: 55
-  fat: 18
+  servings: 1
   allergens: [nuts, soy]
   tags: [no-cook, quick]
   ingredients:
-    - 250 ml soy milk
-    - 1 banana
-    - 30 g peanut butter
-    - 1 scoop (30 g) pea protein
-    - 1 tbsp oats
+  - food: soy-milk
+    grams: 250
+    label: 250 ml soy milk
+  - food: banana
+    grams: 120
+    label: 1 banana
+  - food: peanut-butter
+    grams: 30
+    label: 30 g peanut butter
+  - food: pea-protein
+    grams: 30
+    label: 1 scoop (30 g) pea protein
+  - food: oats
+    grams: 6
+    label: 1 tbsp oats
   steps:
-    - Blend everything until smooth.
-    - Add a splash more milk if it's too thick.
+  - Blend everything until smooth.
+  - Add a splash more milk if it's too thick.
 
 - slug: chicken-quinoa-bowl
   title: Chicken, Quinoa & Roasted Veg Bowl
   slot: lunch
   diet: omnivore
   minutes: 30
-  calories: 560
-  protein: 45
-  carbs: 50
-  fat: 18
+  servings: 1
   allergens: []
   tags: [batch-cook, high-protein]
   ingredients:
-    - 150 g chicken breast
-    - 60 g quinoa (dry)
-    - 1 courgette, chopped
-    - 1 red pepper, chopped
-    - 1 tbsp olive oil
-    - 1 tbsp lemon juice
+  - food: chicken-breast
+    grams: 150
+    label: 150 g chicken breast
+  - food: quinoa
+    grams: 60
+    label: 60 g quinoa (dry)
+  - food: courgette
+    grams: 200
+    label: 1 courgette, chopped
+  - food: red-pepper
+    grams: 150
+    label: 1 red pepper, chopped
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: lemon-juice
+    grams: 15
+    label: 1 tbsp lemon juice
   steps:
-    - Roast the courgette and pepper in the oil at 200°C for 20 minutes.
-    - Simmer the quinoa for 15 minutes, then drain.
-    - Griddle the chicken, slice it, and toss everything with the lemon juice.
+  - Roast the courgette and pepper in the oil at 200°C for 20 minutes.
+  - Simmer the quinoa for 15 minutes, then drain.
+  - Griddle the chicken, slice it, and toss everything with the lemon juice.
 
 - slug: tuna-white-bean-salad
   title: Tuna & White Bean Salad
   slot: lunch
   diet: pescatarian
   minutes: 10
-  calories: 480
-  protein: 40
-  carbs: 38
-  fat: 16
+  servings: 1
   allergens: [fish]
   tags: [no-cook, quick]
   ingredients:
-    - 1 tin (145 g) tuna in spring water
-    - 1 tin (240 g) butter beans, drained
-    - 100 g cherry tomatoes, halved
-    - 1/2 red onion, finely sliced
-    - 1 tbsp olive oil
-    - 1 tbsp red wine vinegar
-    - Handful of parsley
+  - food: tuna-water
+    grams: 112
+    label: 1 tin (145 g) tuna in spring water
+  - food: butter-beans
+    grams: 240
+    label: 1 tin (240 g) butter beans, drained
+  - food: cherry-tomatoes
+    grams: 100
+    label: 100 g cherry tomatoes, halved
+  - food: onion
+    grams: 50
+    label: 1/2 red onion, finely sliced
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: vinegar
+    grams: 15
+    label: 1 tbsp red wine vinegar
+  - food: parsley
+    grams: 5
+    label: Handful of parsley
   steps:
-    - Toss the beans, tomatoes and onion with the oil and vinegar.
-    - Flake in the tuna and fold through the parsley.
-    - Season and serve.
+  - Toss the beans, tomatoes and onion with the oil and vinegar.
+  - Flake in the tuna and fold through the parsley.
+  - Season and serve.
 
 - slug: halloumi-chickpea-salad
   title: Halloumi & Chickpea Salad
   slot: lunch
   diet: vegetarian
   minutes: 15
-  calories: 540
-  protein: 27
-  carbs: 42
-  fat: 28
+  servings: 2
   allergens: [dairy, sesame]
   tags: [quick]
   ingredients:
-    - 100 g halloumi, sliced
-    - 1 tin (240 g) chickpeas, drained
-    - 1/2 cucumber, chopped
-    - 100 g cherry tomatoes
-    - 1 tbsp tahini
-    - 1 tbsp lemon juice
+  - food: halloumi
+    grams: 100
+    label: 100 g halloumi, sliced
+  - food: chickpeas
+    grams: 240
+    label: 1 tin (240 g) chickpeas, drained
+  - food: cucumber
+    grams: 150
+    label: 1/2 cucumber, chopped
+  - food: cherry-tomatoes
+    grams: 100
+    label: 100 g cherry tomatoes
+  - food: tahini
+    grams: 15
+    label: 1 tbsp tahini
+  - food: lemon-juice
+    grams: 15
+    label: 1 tbsp lemon juice
   steps:
-    - Dry-fry the halloumi until golden on both sides.
-    - Toss the chickpeas, cucumber and tomatoes together.
-    - Loosen the tahini with the lemon juice and a little water, drizzle over, and top with the halloumi.
+  - Dry-fry the halloumi until golden on both sides.
+  - Toss the chickpeas, cucumber and tomatoes together.
+  - Loosen the tahini with the lemon juice and a little water, drizzle over, and top with the halloumi.
 
 - slug: turkey-avocado-wrap
   title: Turkey & Avocado Wrap
   slot: lunch
   diet: omnivore
   minutes: 10
-  calories: 520
-  protein: 38
-  carbs: 45
-  fat: 20
+  servings: 1
   allergens: [gluten]
   tags: [quick, packed-lunch]
   ingredients:
-    - 120 g cooked turkey breast, sliced
-    - 1 wholemeal wrap
-    - 1/2 avocado
-    - Handful of spinach
-    - 1 tbsp Greek yoghurt
-    - Squeeze of lime
+  - food: turkey-breast
+    grams: 120
+    label: 120 g cooked turkey breast, sliced
+  - food: tortilla-wrap
+    grams: 60
+    label: 1 wholemeal wrap
+  - food: avocado
+    grams: 75
+    label: 1/2 avocado
+  - food: spinach
+    grams: 30
+    label: Handful of spinach
+  - food: greek-yoghurt
+    grams: 15
+    label: 1 tbsp Greek yoghurt
+  - food: lime-juice
+    grams: 10
+    label: Squeeze of lime
   steps:
-    - Mash the avocado with the yoghurt and lime.
-    - Spread over the wrap, then layer in the turkey and spinach.
-    - Roll tightly and slice in half.
+  - Mash the avocado with the yoghurt and lime.
+  - Spread over the wrap, then layer in the turkey and spinach.
+  - Roll tightly and slice in half.
 
 - slug: lentil-feta-bowl
   title: Lentil & Feta Bowl
   slot: lunch
   diet: vegetarian
   minutes: 20
-  calories: 500
-  protein: 24
-  carbs: 55
-  fat: 20
+  servings: 1
   allergens: [dairy]
   tags: [batch-cook]
   ingredients:
-    - 1 tin (240 g) green lentils, drained
-    - 60 g feta, crumbled
-    - 100 g roasted beetroot
-    - 2 handfuls of rocket
-    - 1 tbsp olive oil
-    - 1 tsp Dijon mustard
+  - food: green-lentils
+    grams: 240
+    label: 1 tin (240 g) green lentils, drained
+  - food: feta
+    grams: 60
+    label: 60 g feta, crumbled
+  - food: beetroot
+    grams: 100
+    label: 100 g roasted beetroot
+  - food: rocket
+    grams: 60
+    label: 2 handfuls of rocket
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: mustard
+    grams: 5
+    label: 1 tsp Dijon mustard
   steps:
-    - Whisk the oil and mustard with a splash of water.
-    - Toss the lentils and beetroot in the dressing.
-    - Top with the feta and rocket.
+  - Whisk the oil and mustard with a splash of water.
+  - Toss the lentils and beetroot in the dressing.
+  - Top with the feta and rocket.
 
 - slug: beef-barley-soup
   title: Beef & Barley Soup
   slot: lunch
   diet: omnivore
   minutes: 45
-  calories: 480
-  protein: 36
-  carbs: 45
-  fat: 16
+  servings: 2
   allergens: [gluten]
   tags: [batch-cook, one-pot]
   ingredients:
-    - 150 g stewing beef, diced
-    - 40 g pearl barley
-    - 1 carrot, diced
-    - 1 stick celery, diced
-    - 1 onion, diced
-    - 1 litre beef stock
-    - 1 tbsp oil
+  - food: stewing-beef
+    grams: 150
+    label: 150 g stewing beef, diced
+  - food: pearl-barley
+    grams: 40
+    label: 40 g pearl barley
+  - food: carrot
+    grams: 80
+    label: 1 carrot, diced
+  - food: celery
+    grams: 40
+    label: 1 stick celery, diced
+  - food: onion
+    grams: 120
+    label: 1 onion, diced
+  - food: beef-stock
+    grams: 1000
+    label: 1 litre beef stock
+  - food: vegetable-oil
+    grams: 14
+    label: 1 tbsp oil
   steps:
-    - Brown the beef in the oil, then set aside.
-    - Soften the vegetables, return the beef and add the stock and barley.
-    - Simmer for 35 minutes until the barley is tender. Season and serve.
+  - Brown the beef in the oil, then set aside.
+  - Soften the vegetables, return the beef and add the stock and barley.
+  - Simmer for 35 minutes until the barley is tender. Season and serve.
 
 - slug: egg-edamame-rice-bowl
   title: Egg & Edamame Rice Bowl
   slot: lunch
   diet: vegetarian
   minutes: 15
-  calories: 510
-  protein: 28
-  carbs: 60
-  fat: 16
+  servings: 1
   allergens: [eggs, soy, sesame]
   tags: [quick, batch-cook]
   ingredients:
-    - 150 g cooked brown rice
-    - 100 g edamame beans
-    - 2 boiled eggs
-    - 1 tbsp soy sauce
-    - 1 tsp sesame oil
-    - 1 spring onion, sliced
+  - food: brown-rice
+    grams: 150
+    label: 150 g cooked brown rice
+  - food: edamame
+    grams: 100
+    label: 100 g edamame beans
+  - food: eggs
+    grams: 100
+    label: 2 boiled eggs
+  - food: soy-sauce
+    grams: 15
+    label: 1 tbsp soy sauce
+  - food: sesame-oil
+    grams: 4.5
+    label: 1 tsp sesame oil
+  - food: spring-onion
+    grams: 15
+    label: 1 spring onion, sliced
   steps:
-    - Warm the rice and edamame together.
-    - Stir through the soy sauce and sesame oil.
-    - Halve the eggs, place on top and scatter with spring onion.
+  - Warm the rice and edamame together.
+  - Stir through the soy sauce and sesame oil.
+  - Halve the eggs, place on top and scatter with spring onion.
 
 - slug: smoky-lentil-tofu-bowl
   title: Smoky Lentil & Tofu Bowl
   slot: lunch
   diet: vegan
   minutes: 25
-  calories: 540
-  protein: 34
-  carbs: 58
-  fat: 16
+  servings: 1
   allergens: [soy]
   tags: [batch-cook, high-protein]
   ingredients:
-    - 120 g firm tofu, cubed
-    - 1 tin (240 g) green lentils, drained
-    - 1 tsp smoked paprika
-    - 1 tsp cumin
-    - 1 tbsp olive oil
-    - 100 g spinach
-    - 1 tbsp lemon juice
+  - food: tofu
+    grams: 120
+    label: 120 g firm tofu, cubed
+  - food: green-lentils
+    grams: 240
+    label: 1 tin (240 g) green lentils, drained
+  - food: paprika
+    grams: 2.3
+    label: 1 tsp smoked paprika
+  - food: cumin
+    grams: 2.1
+    label: 1 tsp cumin
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: spinach
+    grams: 100
+    label: 100 g spinach
+  - food: lemon-juice
+    grams: 15
+    label: 1 tbsp lemon juice
   steps:
-    - Fry the tofu in the oil until golden, then stir in the spices.
-    - Add the lentils and spinach and warm through.
-    - Squeeze over the lemon juice and season.
+  - Fry the tofu in the oil until golden, then stir in the spices.
+  - Add the lentils and spinach and warm through.
+  - Squeeze over the lemon juice and season.
 
 - slug: seitan-broccoli-bowl
   title: Seitan & Broccoli Bowl
   slot: lunch
   diet: vegan
   minutes: 20
-  calories: 560
-  protein: 42
-  carbs: 55
-  fat: 14
+  servings: 1
   allergens: [gluten, soy]
   tags: [high-protein, quick]
   ingredients:
-    - 160 g seitan, sliced
-    - 150 g tenderstem broccoli
-    - 150 g cooked brown rice
-    - 1 tbsp soy sauce
-    - 1 tsp sesame oil
-    - 1 clove garlic, sliced
+  - food: seitan
+    grams: 160
+    label: 160 g seitan, sliced
+  - food: broccoli
+    grams: 150
+    label: 150 g tenderstem broccoli
+  - food: brown-rice
+    grams: 150
+    label: 150 g cooked brown rice
+  - food: soy-sauce
+    grams: 15
+    label: 1 tbsp soy sauce
+  - food: sesame-oil
+    grams: 4.5
+    label: 1 tsp sesame oil
+  - food: garlic
+    grams: 3
+    label: 1 clove garlic, sliced
   steps:
-    - Steam the broccoli for 4 minutes.
-    - Fry the seitan and garlic in the sesame oil until browned.
-    - Toss everything with the soy sauce and serve over the rice.
+  - Steam the broccoli for 4 minutes.
+  - Fry the seitan and garlic in the sesame oil until browned.
+  - Toss everything with the soy sauce and serve over the rice.
 
 - slug: chickpea-quinoa-bowl
   title: Roasted Chickpea & Quinoa Bowl
   slot: lunch
   diet: vegan
   minutes: 30
-  calories: 520
-  protein: 22
-  carbs: 70
-  fat: 16
+  servings: 1
   allergens: []
   tags: [batch-cook]
   ingredients:
-    - 1 tin (240 g) chickpeas, drained
-    - 60 g quinoa (dry)
-    - 1 red pepper, chopped
-    - 1 tsp cumin
-    - 1 tbsp olive oil
-    - 2 handfuls of rocket
-    - 1 tbsp lemon juice
+  - food: chickpeas
+    grams: 240
+    label: 1 tin (240 g) chickpeas, drained
+  - food: quinoa
+    grams: 60
+    label: 60 g quinoa (dry)
+  - food: red-pepper
+    grams: 150
+    label: 1 red pepper, chopped
+  - food: cumin
+    grams: 2.1
+    label: 1 tsp cumin
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: rocket
+    grams: 60
+    label: 2 handfuls of rocket
+  - food: lemon-juice
+    grams: 15
+    label: 1 tbsp lemon juice
   steps:
-    - Toss the chickpeas and pepper with the oil and cumin and roast at 200°C for 20 minutes.
-    - Simmer the quinoa for 15 minutes and drain.
-    - Toss everything with the rocket and lemon juice.
+  - Toss the chickpeas and pepper with the oil and cumin and roast at 200°C for 20 minutes.
+  - Simmer the quinoa for 15 minutes and drain.
+  - Toss everything with the rocket and lemon juice.
 
 - slug: egg-white-feta-omelette
   title: Egg White & Feta Omelette
   slot: breakfast
   diet: vegetarian
   minutes: 10
-  calories: 320
-  protein: 35
-  carbs: 8
-  fat: 14
+  servings: 1
   allergens: [eggs, dairy]
   tags: [quick, high-protein]
   ingredients:
-    - 5 egg whites
-    - 1 whole egg
-    - 40 g feta, crumbled
-    - 100 g spinach
-    - 1 tsp olive oil
+  - food: egg-whites
+    grams: 165
+    label: 5 egg whites
+  - food: eggs
+    grams: 50
+    label: 1 whole egg
+  - food: feta
+    grams: 40
+    label: 40 g feta, crumbled
+  - food: spinach
+    grams: 100
+    label: 100 g spinach
+  - food: olive-oil
+    grams: 4.5
+    label: 1 tsp olive oil
   steps:
-    - Wilt the spinach in the oil, then pour over the beaten eggs.
-    - Cook gently until nearly set, scatter over the feta and fold.
+  - Wilt the spinach in the oil, then pour over the beaten eggs.
+  - Cook gently until nearly set, scatter over the feta and fold.
 
 - slug: cottage-cheese-lentil-bowl
   title: Cottage Cheese & Lentil Power Bowl
   slot: lunch
   diet: vegetarian
   minutes: 15
-  calories: 520
-  protein: 38
-  carbs: 45
-  fat: 16
+  servings: 1
   allergens: [dairy]
   tags: [no-cook, high-protein, batch-cook]
   ingredients:
-    - 200 g cottage cheese
-    - 1 tin (240 g) green lentils, drained
-    - 100 g cherry tomatoes, halved
-    - 1/2 cucumber, diced
-    - 1 tbsp olive oil
-    - 1 tbsp lemon juice
-    - Handful of mint
+  - food: cottage-cheese
+    grams: 200
+    label: 200 g cottage cheese
+  - food: green-lentils
+    grams: 240
+    label: 1 tin (240 g) green lentils, drained
+  - food: cherry-tomatoes
+    grams: 100
+    label: 100 g cherry tomatoes, halved
+  - food: cucumber
+    grams: 150
+    label: 1/2 cucumber, diced
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: lemon-juice
+    grams: 15
+    label: 1 tbsp lemon juice
+  - food: mint
+    grams: 5
+    label: Handful of mint
   steps:
-    - Toss the lentils, tomatoes and cucumber with the oil and lemon juice.
-    - Spoon over the cottage cheese and scatter with mint.
+  - Toss the lentils, tomatoes and cucumber with the oil and lemon juice.
+  - Spoon over the cottage cheese and scatter with mint.
 
 - slug: paneer-chickpea-curry
   title: Paneer & Chickpea Curry
   slot: dinner
   diet: vegetarian
   minutes: 30
-  calories: 600
-  protein: 38
-  carbs: 50
-  fat: 26
+  servings: 2
   allergens: [dairy]
   tags: [one-pot, batch-cook]
   ingredients:
-    - 150 g paneer, cubed
-    - 1 tin (240 g) chickpeas, drained
-    - 1 tin chopped tomatoes
-    - 1 onion, diced
-    - 2 tbsp curry powder
-    - 1 tbsp oil
-    - 150 g cooked rice
+  - food: paneer
+    grams: 150
+    label: 150 g paneer, cubed
+  - food: chickpeas
+    grams: 240
+    label: 1 tin (240 g) chickpeas, drained
+  - food: chopped-tomatoes
+    grams: 400
+    label: 1 tin chopped tomatoes
+  - food: onion
+    grams: 120
+    label: 1 onion, diced
+  - food: curry-powder
+    grams: 12
+    label: 2 tbsp curry powder
+  - food: vegetable-oil
+    grams: 14
+    label: 1 tbsp oil
+  - food: white-rice
+    grams: 150
+    label: 150 g cooked rice
   steps:
-    - Soften the onion in the oil, add the curry powder and cook for a minute.
-    - Add the tomatoes and chickpeas and simmer for 20 minutes.
-    - Stir in the paneer and serve with the rice.
+  - Soften the onion in the oil, add the curry powder and cook for a minute.
+  - Add the tomatoes and chickpeas and simmer for 20 minutes.
+  - Stir in the paneer and serve with the rice.
 
 - slug: tempeh-stir-fry
   title: Tempeh & Broccoli Stir-Fry
   slot: dinner
   diet: vegan
   minutes: 20
-  calories: 560
-  protein: 38
-  carbs: 50
-  fat: 18
+  servings: 1
   allergens: [soy]
   tags: [quick, high-protein]
   ingredients:
-    - 180 g tempeh, sliced
-    - 200 g broccoli
-    - 150 g cooked brown rice
-    - 2 tbsp soy sauce
-    - 1 tsp sesame oil
-    - 1 clove garlic, sliced
+  - food: tempeh
+    grams: 180
+    label: 180 g tempeh, sliced
+  - food: broccoli
+    grams: 200
+    label: 200 g broccoli
+  - food: brown-rice
+    grams: 150
+    label: 150 g cooked brown rice
+  - food: soy-sauce
+    grams: 30
+    label: 2 tbsp soy sauce
+  - food: sesame-oil
+    grams: 4.5
+    label: 1 tsp sesame oil
+  - food: garlic
+    grams: 3
+    label: 1 clove garlic, sliced
   steps:
-    - Fry the tempeh in the sesame oil until golden.
-    - Add the broccoli and garlic and stir-fry for 4 minutes.
-    - Add the soy sauce, warm the rice through and serve.
+  - Fry the tempeh in the sesame oil until golden.
+  - Add the broccoli and garlic and stir-fry for 4 minutes.
+  - Add the soy sauce, warm the rice through and serve.
 
 - slug: garlic-butter-chicken-greens
   title: Garlic Butter Chicken & Greens
   slot: dinner
   diet: omnivore
   minutes: 25
-  calories: 620
-  protein: 55
-  carbs: 35
-  fat: 26
+  servings: 1
   allergens: [dairy]
   tags: [one-pan, high-protein]
   ingredients:
-    - 200 g chicken breast
-    - 200 g tenderstem broccoli
-    - 150 g new potatoes
-    - 25 g butter
-    - 2 cloves garlic, crushed
-    - 1 tbsp olive oil
+  - food: chicken-breast
+    grams: 200
+    label: 200 g chicken breast
+  - food: broccoli
+    grams: 200
+    label: 200 g tenderstem broccoli
+  - food: potatoes
+    grams: 150
+    label: 150 g new potatoes
+  - food: butter
+    grams: 25
+    label: 25 g butter
+  - food: garlic
+    grams: 6
+    label: 2 cloves garlic, crushed
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
   steps:
-    - Boil the potatoes for 15 minutes.
-    - Sear the chicken in the oil for 5 minutes a side, then rest and slice.
-    - Steam the broccoli for 4 minutes, toss with the garlic butter, and serve with the chicken and potatoes.
+  - Boil the potatoes for 15 minutes.
+  - Sear the chicken in the oil for 5 minutes a side, then rest and slice.
+  - Steam the broccoli for 4 minutes, toss with the garlic butter, and serve with the chicken and potatoes.
 
 - slug: teriyaki-salmon-rice-bowl
   title: Teriyaki Salmon Rice Bowl
   slot: dinner
   diet: pescatarian
   minutes: 25
-  calories: 650
-  protein: 44
-  carbs: 70
-  fat: 20
+  servings: 1
   allergens: [fish, soy, sesame]
   tags: [quick]
   ingredients:
-    - 150 g salmon fillet
-    - 150 g cooked jasmine rice
-    - 100 g pak choi
-    - 2 tbsp soy sauce
-    - 1 tbsp honey
-    - 1 tsp sesame oil
-    - 1 tsp sesame seeds
+  - food: salmon
+    grams: 150
+    label: 150 g salmon fillet
+  - food: white-rice
+    grams: 150
+    label: 150 g cooked jasmine rice
+  - food: pak-choi
+    grams: 100
+    label: 100 g pak choi
+  - food: soy-sauce
+    grams: 30
+    label: 2 tbsp soy sauce
+  - food: honey
+    grams: 21
+    label: 1 tbsp honey
+  - food: sesame-oil
+    grams: 4.5
+    label: 1 tsp sesame oil
+  - food: sesame-seeds
+    grams: 3
+    label: 1 tsp sesame seeds
   steps:
-    - Mix the soy, honey and sesame oil.
-    - Pan-fry the salmon for 4 minutes a side, spooning over the sauce at the end.
-    - Wilt the pak choi, serve over the rice with the salmon, and scatter with sesame seeds.
+  - Mix the soy, honey and sesame oil.
+  - Pan-fry the salmon for 4 minutes a side, spooning over the sauce at the end.
+  - Wilt the pak choi, serve over the rice with the salmon, and scatter with sesame seeds.
 
 - slug: tofu-peanut-noodles
   title: Tofu Peanut Noodles
   slot: dinner
   diet: vegan
   minutes: 20
-  calories: 640
-  protein: 32
-  carbs: 70
-  fat: 26
+  servings: 1
   allergens: [soy, nuts, gluten]
   tags: [quick]
   ingredients:
-    - 180 g firm tofu, cubed
-    - 100 g wholewheat noodles
-    - 2 tbsp peanut butter
-    - 2 tbsp soy sauce
-    - 1 tsp rice vinegar
-    - 1 carrot, grated
-    - 1 spring onion, sliced
+  - food: tofu
+    grams: 180
+    label: 180 g firm tofu, cubed
+  - food: wholewheat-pasta
+    grams: 100
+    label: 100 g wholewheat noodles
+  - food: peanut-butter
+    grams: 32
+    label: 2 tbsp peanut butter
+  - food: soy-sauce
+    grams: 30
+    label: 2 tbsp soy sauce
+  - food: vinegar
+    grams: 5
+    label: 1 tsp rice vinegar
+  - food: carrot
+    grams: 80
+    label: 1 carrot, grated
+  - food: spring-onion
+    grams: 15
+    label: 1 spring onion, sliced
   steps:
-    - Fry the tofu until golden on all sides.
-    - Cook the noodles, then drain.
-    - Whisk the peanut butter, soy and vinegar with a little hot water, toss everything together and top with spring onion.
+  - Fry the tofu until golden on all sides.
+  - Cook the noodles, then drain.
+  - Whisk the peanut butter, soy and vinegar with a little hot water, toss everything together and top with spring onion.
 
 - slug: chilli-con-carne-rice
   title: Chilli con Carne with Rice
   slot: dinner
   diet: omnivore
   minutes: 40
-  calories: 680
-  protein: 46
-  carbs: 65
-  fat: 26
+  servings: 2
   allergens: []
   tags: [batch-cook, one-pot]
   ingredients:
-    - 150 g 5% beef mince
-    - 1 tin kidney beans, drained
-    - 1 tin chopped tomatoes
-    - 1 onion, diced
-    - 1 tsp cumin
-    - 1 tsp smoked paprika
-    - 150 g cooked rice
+  - food: beef-mince
+    grams: 150
+    label: 150 g 5% beef mince
+  - food: kidney-beans
+    grams: 240
+    label: 1 tin kidney beans, drained
+  - food: chopped-tomatoes
+    grams: 400
+    label: 1 tin chopped tomatoes
+  - food: onion
+    grams: 120
+    label: 1 onion, diced
+  - food: cumin
+    grams: 2.1
+    label: 1 tsp cumin
+  - food: paprika
+    grams: 2.3
+    label: 1 tsp smoked paprika
+  - food: white-rice
+    grams: 150
+    label: 150 g cooked rice
   steps:
-    - Brown the mince, then add the onion and spices and cook for 5 minutes.
-    - Add the tomatoes and beans and simmer for 25 minutes.
-    - Serve with the rice.
+  - Brown the mince, then add the onion and spices and cook for 5 minutes.
+  - Add the tomatoes and beans and simmer for 25 minutes.
+  - Serve with the rice.
 
 - slug: cod-butter-beans-greens
   title: Cod with Butter Beans & Greens
   slot: dinner
   diet: pescatarian
   minutes: 25
-  calories: 560
-  protein: 45
-  carbs: 45
-  fat: 18
+  servings: 1
   allergens: [fish, dairy]
   tags: [quick, one-pan]
   ingredients:
-    - 180 g cod fillet
-    - 1 tin (240 g) butter beans, drained
-    - 200 g kale
-    - 2 cloves garlic
-    - 20 g butter
-    - 1 tbsp olive oil
-    - 1 lemon
+  - food: cod
+    grams: 180
+    label: 180 g cod fillet
+  - food: butter-beans
+    grams: 240
+    label: 1 tin (240 g) butter beans, drained
+  - food: kale
+    grams: 200
+    label: 200 g kale
+  - food: garlic
+    grams: 6
+    label: 2 cloves garlic
+  - food: butter
+    grams: 20
+    label: 20 g butter
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: lemon-juice
+    grams: 40
+    label: 1 lemon
   steps:
-    - Pan-fry the cod in the oil for 4 minutes a side, then rest.
-    - Wilt the kale with the garlic and butter.
-    - Warm the beans through, squeeze over the lemon and serve with the cod.
+  - Pan-fry the cod in the oil for 4 minutes a side, then rest.
+  - Wilt the kale with the garlic and butter.
+  - Warm the beans through, squeeze over the lemon and serve with the cod.
 
 - slug: chicken-shawarma-traybake
   title: Chicken Shawarma Traybake
   slot: dinner
   diet: omnivore
   minutes: 35
-  calories: 640
-  protein: 52
-  carbs: 40
-  fat: 28
+  servings: 1
   allergens: [dairy]
   tags: [one-pan, batch-cook]
   ingredients:
-    - 200 g chicken thigh, diced
-    - 2 tbsp Greek yoghurt
-    - 1 tsp cumin
-    - 1 tsp coriander
-    - 1 tsp paprika
-    - 1 red onion, wedges
-    - 1 pepper, chunks
-    - 1 wholemeal flatbread
+  - food: chicken-thigh
+    grams: 200
+    label: 200 g chicken thigh, diced
+  - food: greek-yoghurt
+    grams: 30
+    label: 2 tbsp Greek yoghurt
+  - food: cumin
+    grams: 2.1
+    label: 1 tsp cumin
+  - food: coriander-seeds
+    grams: 1.8
+    label: 1 tsp coriander
+  - food: paprika
+    grams: 2.3
+    label: 1 tsp paprika
+  - food: onion
+    grams: 100
+    label: 1 red onion, wedges
+  - food: red-pepper
+    grams: 150
+    label: 1 pepper, chunks
+  - food: flatbread
+    grams: 80
+    label: 1 wholemeal flatbread
   steps:
-    - Mix the yoghurt and spices, coat the chicken and leave for 10 minutes.
-    - Roast the chicken, onion and pepper at 200°C for 25 minutes.
-    - Serve with the warmed flatbread.
+  - Mix the yoghurt and spices, coat the chicken and leave for 10 minutes.
+  - Roast the chicken, onion and pepper at 200°C for 25 minutes.
+  - Serve with the warmed flatbread.
 
 - slug: black-bean-sweet-potato-chilli
   title: Black Bean & Sweet Potato Chilli
   slot: dinner
   diet: vegan
   minutes: 35
-  calories: 560
-  protein: 22
-  carbs: 80
-  fat: 18
+  servings: 2
   allergens: []
   tags: [batch-cook, one-pot]
   ingredients:
-    - 1 large sweet potato, diced
-    - 1 tin black beans, drained
-    - 1 tin chopped tomatoes
-    - 1 onion, diced
-    - 1 tsp cumin
-    - 1 tsp smoked paprika
-    - 1 tbsp olive oil
-    - 150 g cooked rice
+  - food: sweet-potato
+    grams: 300
+    label: 1 large sweet potato, diced
+  - food: black-beans
+    grams: 240
+    label: 1 tin black beans, drained
+  - food: chopped-tomatoes
+    grams: 400
+    label: 1 tin chopped tomatoes
+  - food: onion
+    grams: 120
+    label: 1 onion, diced
+  - food: cumin
+    grams: 2.1
+    label: 1 tsp cumin
+  - food: paprika
+    grams: 2.3
+    label: 1 tsp smoked paprika
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: white-rice
+    grams: 150
+    label: 150 g cooked rice
   steps:
-    - Soften the onion in the oil, then add the spices.
-    - Add the sweet potato, beans and tomatoes with a splash of water and simmer for 25 minutes.
-    - Serve with the rice.
+  - Soften the onion in the oil, then add the spices.
+  - Add the sweet potato, beans and tomatoes with a splash of water and simmer for 25 minutes.
+  - Serve with the rice.
 
 - slug: steak-roast-potatoes
   title: Steak & Roast Potatoes
   slot: dinner
   diet: omnivore
   minutes: 35
-  calories: 700
-  protein: 55
-  carbs: 45
-  fat: 32
+  servings: 1
   allergens: [dairy]
   tags: [weekend, high-protein]
   ingredients:
-    - 200 g rump steak
-    - 250 g potatoes, halved
-    - 200 g green beans
-    - 20 g butter
-    - 1 tbsp olive oil
-    - 1 clove garlic
+  - food: rump-steak
+    grams: 200
+    label: 200 g rump steak
+  - food: potatoes
+    grams: 250
+    label: 250 g potatoes, halved
+  - food: green-beans
+    grams: 200
+    label: 200 g green beans
+  - food: butter
+    grams: 20
+    label: 20 g butter
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: garlic
+    grams: 3
+    label: 1 clove garlic
   steps:
-    - Roast the potatoes in the oil at 200°C for 30 minutes.
-    - Sear the steak for 3 minutes a side and rest for 5 minutes.
-    - Steam the beans, toss with the garlic butter, and serve everything together.
+  - Roast the potatoes in the oil at 200°C for 30 minutes.
+  - Sear the steak for 3 minutes a side and rest for 5 minutes.
+  - Steam the beans, toss with the garlic butter, and serve everything together.
 
 - slug: prawn-courgette-linguine
   title: Prawn & Courgette Linguine
   slot: dinner
   diet: pescatarian
   minutes: 20
-  calories: 610
-  protein: 40
-  carbs: 70
-  fat: 18
+  servings: 2
   allergens: [shellfish, gluten, dairy]
   tags: [quick]
   ingredients:
-    - 150 g linguine
-    - 150 g king prawns
-    - 1 courgette, ribboned
-    - 2 cloves garlic
-    - 1 tbsp olive oil
-    - 20 g parmesan
-    - 1 lemon
+  - food: white-pasta
+    grams: 150
+    label: 150 g linguine
+  - food: prawns
+    grams: 150
+    label: 150 g king prawns
+  - food: courgette
+    grams: 200
+    label: 1 courgette, ribboned
+  - food: garlic
+    grams: 6
+    label: 2 cloves garlic
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: parmesan
+    grams: 20
+    label: 20 g parmesan
+  - food: lemon-juice
+    grams: 40
+    label: 1 lemon
   steps:
-    - Cook the linguine, keeping a cup of the water.
-    - Fry the garlic and prawns in the oil for 3 minutes, then add the courgette.
-    - Toss with the pasta, a splash of the water, the parmesan and lemon.
+  - Cook the linguine, keeping a cup of the water.
+  - Fry the garlic and prawns in the oil for 3 minutes, then add the courgette.
+  - Toss with the pasta, a splash of the water, the parmesan and lemon.
 
 - slug: lentil-dahl-paneer
   title: Lentil Dahl with Paneer
   slot: dinner
   diet: vegetarian
   minutes: 30
-  calories: 590
-  protein: 30
-  carbs: 65
-  fat: 22
+  servings: 2
   allergens: [dairy]
   tags: [one-pot, batch-cook]
   ingredients:
-    - 100 g red lentils (dry)
-    - 100 g paneer, cubed
-    - 1 onion, diced
-    - 1 tsp turmeric
-    - 1 tsp garam masala
-    - 1 tbsp oil
-    - 150 g cooked rice
+  - food: red-lentils
+    grams: 100
+    label: 100 g red lentils (dry)
+  - food: paneer
+    grams: 100
+    label: 100 g paneer, cubed
+  - food: onion
+    grams: 120
+    label: 1 onion, diced
+  - food: turmeric
+    grams: 3
+    label: 1 tsp turmeric
+  - food: garam-masala
+    grams: 2
+    label: 1 tsp garam masala
+  - food: vegetable-oil
+    grams: 14
+    label: 1 tbsp oil
+  - food: white-rice
+    grams: 150
+    label: 150 g cooked rice
   steps:
-    - Soften the onion in the oil, add the spices, then the lentils and 500 ml water.
-    - Simmer for 20 minutes until thick.
-    - Fry the paneer until golden and serve on top with the rice.
+  - Soften the onion in the oil, add the spices, then the lentils and 500 ml water.
+  - Simmer for 20 minutes until thick.
+  - Fry the paneer until golden and serve on top with the rice.
 
 - slug: greek-yoghurt-honey-walnuts
   title: Greek Yoghurt, Honey & Walnuts
   slot: snack
   diet: vegetarian
   minutes: 3
-  calories: 260
-  protein: 20
-  carbs: 18
-  fat: 12
+  servings: 1
   allergens: [dairy, nuts]
   tags: [no-cook, quick]
   ingredients:
-    - 200 g 0% Greek yoghurt
-    - 1 tsp honey
-    - 15 g walnuts
+  - food: greek-yoghurt-0
+    grams: 200
+    label: 200 g 0% Greek yoghurt
+  - food: honey
+    grams: 7
+    label: 1 tsp honey
+  - food: walnuts
+    grams: 15
+    label: 15 g walnuts
   steps:
-    - Spoon the yoghurt into a bowl, drizzle with honey and scatter over the walnuts.
+  - Spoon the yoghurt into a bowl, drizzle with honey and scatter over the walnuts.
 
 - slug: boiled-eggs
   title: Boiled Eggs with Salt
   slot: snack
   diet: vegetarian
   minutes: 8
-  calories: 160
-  protein: 13
-  carbs: 1
-  fat: 11
+  servings: 1
   allergens: [eggs]
   tags: [no-cook, make-ahead]
   ingredients:
-    - 2 eggs
-    - Pinch of flaky salt
+  - food: eggs
+    grams: 100
+    label: 2 eggs
+  - food: salt
+    grams: 1
+    label: Pinch of flaky salt
   steps:
-    - Boil the eggs for 7 minutes, cool under cold water and peel.
-    - Season with salt.
+  - Boil the eggs for 7 minutes, cool under cold water and peel.
+  - Season with salt.
 
 - slug: cottage-cheese-pineapple
   title: Cottage Cheese & Pineapple
   slot: snack
   diet: vegetarian
   minutes: 2
-  calories: 200
-  protein: 22
-  carbs: 20
-  fat: 3
+  servings: 1
   allergens: [dairy]
   tags: [no-cook, quick, high-protein]
   ingredients:
-    - 200 g cottage cheese
-    - 100 g pineapple chunks
+  - food: cottage-cheese
+    grams: 200
+    label: 200 g cottage cheese
+  - food: pineapple
+    grams: 100
+    label: 100 g pineapple chunks
   steps:
-    - Spoon the cottage cheese into a bowl and top with the pineapple.
+  - Spoon the cottage cheese into a bowl and top with the pineapple.
 
 - slug: chilli-edamame
   title: Chilli Salt Edamame
   slot: snack
   diet: vegan
   minutes: 5
-  calories: 190
-  protein: 17
-  carbs: 14
-  fat: 8
+  servings: 1
   allergens: [soy]
   tags: [quick]
   ingredients:
-    - 150 g edamame beans
-    - 1/2 tsp chilli flakes
-    - Pinch of sea salt
+  - food: edamame
+    grams: 150
+    label: 150 g edamame beans
+  - food: chilli-powder
+    grams: 0.9
+    label: 1/2 tsp chilli flakes
+  - food: salt
+    grams: 1
+    label: Pinch of sea salt
   steps:
-    - Steam or microwave the edamame for 3 minutes.
-    - Toss with the chilli flakes and salt.
+  - Steam or microwave the edamame for 3 minutes.
+  - Toss with the chilli flakes and salt.
 
 - slug: whey-protein-shake
   title: Simple Protein Shake
   slot: snack
   diet: vegetarian
   minutes: 2
-  calories: 180
-  protein: 30
-  carbs: 8
-  fat: 3
+  servings: 1
   allergens: [dairy]
   tags: [no-cook, quick, high-protein]
   ingredients:
-    - 1 scoop (30 g) whey protein
-    - 300 ml water or milk
+  - food: whey-protein
+    grams: 30
+    label: 1 scoop (30 g) whey protein
+  - food: water
+    grams: 300
+    label: 300 ml water or milk
   steps:
-    - Shake together until smooth.
+  - Shake together until smooth.
 
 - slug: plant-protein-shake
   title: Plant Protein Shake
   slot: snack
   diet: vegan
   minutes: 2
-  calories: 170
-  protein: 28
-  carbs: 6
-  fat: 3
+  servings: 1
   allergens: [soy]
   tags: [no-cook, quick, high-protein]
   ingredients:
-    - 1 scoop (30 g) pea or soy protein
-    - 300 ml soy milk
-    - Pinch of cinnamon
+  - food: pea-protein
+    grams: 30
+    label: 1 scoop (30 g) pea or soy protein
+  - food: soy-milk
+    grams: 300
+    label: 300 ml soy milk
+  - food: cinnamon
+    grams: 0.5
+    label: Pinch of cinnamon
   steps:
-    - Shake everything together until smooth.
+  - Shake everything together until smooth.
 
 - slug: beef-jerky
   title: Beef Jerky
   slot: snack
   diet: omnivore
   minutes: 1
-  calories: 150
-  protein: 25
-  carbs: 6
-  fat: 3
+  servings: 1
   allergens: []
   tags: [no-cook, quick, high-protein]
   ingredients:
-    - 50 g beef jerky
+  - food: beef-jerky
+    grams: 50
+    label: 50 g beef jerky
   steps:
-    - Eat straight from the pack.
+  - Eat straight from the pack.
 
 - slug: peanut-butter-apple
   title: Peanut Butter Apple Slices
   slot: snack
   diet: vegan
   minutes: 3
-  calories: 230
-  protein: 8
-  carbs: 28
-  fat: 11
+  servings: 1
   allergens: [nuts]
   tags: [no-cook, quick]
   ingredients:
-    - 1 apple
-    - 2 tbsp peanut butter
+  - food: apple
+    grams: 150
+    label: 1 apple
+  - food: peanut-butter
+    grams: 32
+    label: 2 tbsp peanut butter
   steps:
-    - Core and slice the apple, then spread each slice with peanut butter.
+  - Core and slice the apple, then spread each slice with peanut butter.
 
 - slug: hummus-veg-sticks
   title: Hummus & Veg Sticks
   slot: snack
   diet: vegan
   minutes: 3
-  calories: 210
-  protein: 7
-  carbs: 20
-  fat: 12
+  servings: 1
   allergens: [sesame]
   tags: [no-cook, quick]
   ingredients:
-    - 80 g hummus
-    - 1 carrot
-    - 1/2 cucumber
+  - food: hummus
+    grams: 80
+    label: 80 g hummus
+  - food: carrot
+    grams: 80
+    label: 1 carrot
+  - food: cucumber
+    grams: 150
+    label: 1/2 cucumber
   steps:
-    - Cut the vegetables into sticks and dip.
+  - Cut the vegetables into sticks and dip.
 
 - slug: tuna-crackers
   title: Tuna & Oatcakes
   slot: snack
   diet: pescatarian
   minutes: 4
-  calories: 210
-  protein: 22
-  carbs: 15
-  fat: 7
+  servings: 1
   allergens: [fish, gluten]
   tags: [no-cook, quick]
   ingredients:
-    - 1 small tin (80 g) tuna in spring water
-    - 3 oatcakes
-    - 1 tsp light mayonnaise
-    - Squeeze of lemon
+  - food: tuna-water
+    grams: 56
+    label: 1 small tin (80 g) tuna in spring water
+  - food: oatcakes
+    grams: 30
+    label: 3 oatcakes
+  - food: mayonnaise-light
+    grams: 5
+    label: 1 tsp light mayonnaise
+  - food: lemon-juice
+    grams: 10
+    label: Squeeze of lemon
   steps:
-    - Mix the tuna with the mayonnaise and lemon.
-    - Pile onto the oatcakes.
+  - Mix the tuna with the mayonnaise and lemon.
+  - Pile onto the oatcakes.
 
 - slug: soy-yoghurt-seeds
   title: Soy Yoghurt with Seeds
   slot: snack
   diet: vegan
   minutes: 2
-  calories: 220
-  protein: 16
-  carbs: 20
-  fat: 8
+  servings: 1
   allergens: [soy]
   tags: [no-cook, quick]
   ingredients:
-    - 200 g plain soy yoghurt
-    - 1 tbsp pumpkin seeds
-    - 50 g blueberries
+  - food: soy-yoghurt
+    grams: 200
+    label: 200 g plain soy yoghurt
+  - food: pumpkin-seeds
+    grams: 10
+    label: 1 tbsp pumpkin seeds
+  - food: blueberries
+    grams: 50
+    label: 50 g blueberries
   steps:
-    - Spoon the yoghurt into a bowl and top with the seeds and blueberries.
+  - Spoon the yoghurt into a bowl and top with the seeds and blueberries.
 
 - slug: roasted-chickpeas
   title: Roasted Chickpeas
   slot: snack
   diet: vegan
   minutes: 30
-  calories: 200
-  protein: 10
-  carbs: 26
-  fat: 7
+  servings: 2
   allergens: []
   tags: [make-ahead, batch-cook]
   ingredients:
-    - 1 tin (240 g) chickpeas, drained
-    - 1 tbsp olive oil
-    - 1 tsp smoked paprika
-    - Pinch of salt
+  - food: chickpeas
+    grams: 240
+    label: 1 tin (240 g) chickpeas, drained
+  - food: olive-oil
+    grams: 14
+    label: 1 tbsp olive oil
+  - food: paprika
+    grams: 2.3
+    label: 1 tsp smoked paprika
+  - food: salt
+    grams: 0.5
+    label: Pinch of salt
   steps:
-    - Dry the chickpeas, toss in the oil and paprika and roast at 200°C for 25 minutes.
-    - Season with salt and cool before storing.
+  - Dry the chickpeas, toss in the oil and paprika and roast at 200°C for 25 minutes.
+  - Season with salt and cool before storing.

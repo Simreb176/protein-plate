@@ -23,8 +23,8 @@
   <div class="post-item" data-search="{{ (recipe.title ~ ' ' ~ recipe.slot ~ ' ' ~ recipe.diet ~ ' ' ~ (recipe.tags|join(' '))) | lower }}">
     <div class="body">
       <h3>{{ recipe.title }}</h3>
-      <time>{{ recipe.slot }} &middot; {{ recipe.diet }} &middot; {{ recipe.protein }} g protein &middot; {{ recipe.calories }} kcal &middot; {{ recipe.minutes }} min</time>
-      <p class="excerpt">{{ recipe.ingredients[0] if recipe.ingredients else '' }}{% if recipe.ingredients|length > 1 %} and {{ recipe.ingredients|length - 1 }} more{% endif %}</p>
+      <time>{{ recipe.slot }} &middot; {{ recipe.diet }} &middot; {{ recipe.protein | round(0) | int }} g protein &middot; {{ recipe.calories | round(0) | int }} kcal &middot; {{ recipe.fibre | round(1) }} g fibre &middot; serves {{ recipe.servings }} &middot; {{ recipe.minutes }} min</time>
+      <p class="excerpt">{{ recipe.ingredient_lines[0] if recipe.ingredient_lines else '' }}{% if recipe.ingredient_lines|length > 1 %} and {{ recipe.ingredient_lines|length - 1 }} more{% endif %}</p>
     </div>
     <div class="actions">
       <a class="btn ghost small" href="{{ url_for('recipe_edit', slug=recipe.slug) }}">Edit</a>

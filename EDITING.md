@@ -38,7 +38,7 @@ Open the assistant in this folder and say what you'd like:
 The assistant edits the files, rebuilds the site and gives you a link to look
 at.
 
-## The four content files
+## The content files
 
 Everything the site says comes from `data/`:
 
@@ -48,38 +48,54 @@ Everything the site says comes from `data/`:
 | `data/planner.yml` | Defaults, slider ranges, meal patterns, diets and allergens |
 | `data/about.yml` | The words on the How it works page |
 | `data/site.yml` | Site name, description, email and social links |
+| `data/foods.yml` | The nutrition table — generated, don't edit by hand |
 
 YAML is just lists of `key: value` pairs. Indentation matters: items that line
 up belong together. Copy the block above when in doubt.
 
 ## Adding a recipe
 
-Add a block to `data/recipes.yml` in the same shape as the others:
+The easiest way is the **Recipes** screen: pick a food for each ingredient and
+type the weight in grams. The nutrition is calculated for you — there are no
+calorie boxes.
+
+By hand, add a block to `data/recipes.yml` in the same shape as the others:
 
 ```yaml
-- slug: chicken-chorizo-traybake     # the web address, lowercase with hyphens
-  title: Chicken & Chorizo Traybake
+- slug: chicken-traybake            # the web address, lowercase with hyphens
+  title: Chicken Traybake
   slot: dinner                      # breakfast | lunch | dinner | snack
   diet: omnivore                    # omnivore | pescatarian | vegetarian | vegan
   minutes: 35
-  calories: 640
-  protein: 48
-  carbs: 45
-  fat: 26
+  servings: 2                       # how many servings the ingredients make
   allergens: [dairy]                # dairy, gluten, eggs, fish, shellfish, soy, nuts, sesame
   tags: [one-pan, batch-cook]
   ingredients:
-    - 150 g chicken breast
-    - 60 g chorizo
-    - 250 g potatoes
+  - food: chicken-breast            # a food from data/foods.yml
+    grams: 300
+    label: 300 g chicken breast     # optional display text
+  - food: potatoes
+    grams: 500
   steps:
-    - Heat the oven to 200°C.
-    - Roast everything for 30 minutes.
+  - Heat the oven to 200°C.
+  - Roast everything for 30 minutes.
   note: Optional serving suggestion.
 ```
 
 Then rebuild and look at the preview. The planner picks it up automatically.
-Keep `calories`, `protein`, `carbs`, `fat` and `minutes` as plain numbers.
+Use a food key that exists in `data/foods.yml`; the build will tell you if it
+doesn't.
+
+## Where the nutrition comes from
+
+Calories, protein, carbs, fat and fibre are calculated from the ingredient
+weights using the UK **CoFID 2021** dataset (McCance and Widdowson's
+Composition of Foods Integrated Dataset). Fibre is AOAC fibre where CoFID has
+it. A few products CoFID doesn't cover — 0% Greek yoghurt, protein powders,
+seitan and chia — use a typical label value, and the recipe page says so.
+
+It is an estimate, not a lab analysis. Check labels if you need exact numbers,
+especially for allergies.
 
 ## Changing the planner's defaults
 

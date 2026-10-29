@@ -16,7 +16,11 @@ There is no database, no account system and no server-side code at runtime.
 | `data/site.yml` | Site title, description, contact, social links, SEO | Yes — content |
 | `data/planner.yml` | Defaults, slider ranges, meal patterns, diets, allergens, featured recipes | Yes — behaviour |
 | `data/about.yml` | The words on the How it works page (Markdown) | Yes — content |
-| `data/recipes.yml` | The recipe shelf — one block per recipe | Yes — content |
+| `data/recipes.yml` | The recipe shelf — one block per recipe, with structured ingredients | Yes — content |
+| `data/foods.yml` | Per-100g nutrition table generated from CoFID 2021 | Only via `tools/build_foods.py` |
+| `nutrition.py` | Ingredient → calories/protein/carbs/fat/fibre maths | Yes — when changing the model |
+| `tools/build_foods.py` | Rebuilds `data/foods.yml` from the CoFID spreadsheet | Rarely |
+| `tools/structure_recipes.py` | The one-off migration that structured the original recipe lines | No (historical) |
 | `templates/*.html` | Jinja2 layouts: `base`, `index` (planner), `recipes`, `recipe`, `about` | Yes — layout |
 | `styles.css` | All styling. Section 1 holds every design token | Yes — appearance |
 | `app.js` | The planner: filtering, search, rendering, swaps | Yes — behaviour |
@@ -48,8 +52,12 @@ There is no database, no account system and no server-side code at runtime.
 ### Adding or changing a recipe
 
 Append to `data/recipes.yml` in the same shape as the existing blocks. Required
-fields: `slug`, `title`, `slot`, `diet`, `minutes`, `calories`, `protein`,
-`carbs`, `fat`. Optional: `allergens`, `tags`, `ingredients`, `steps`, `note`.
+fields: `slug`, `title`, `slot`, `diet`, `minutes`, `servings` and
+`ingredients`. Optional: `allergens`, `tags`, `steps`, `note`.
+
+Each ingredient is a row of `food` (a key in `data/foods.yml`), `grams` and an
+optional `label` for the website. Calories, protein, carbs, fat and fibre are
+**calculated** by `nutrition.py` from those weights — never typed in.
 
 The build validates:
 
@@ -57,10 +65,13 @@ The build validates:
 - `slot` is in `planner.yml` → `slots`;
 - `diet` is in `planner.yml` → `diets`;
 - every `allergens` entry is in `planner.yml` → `allergens`;
-- `minutes`, `calories`, `protein`, `carbs` and `fat` are whole numbers.
+- `minutes` and `servings` are positive numbers;
+- every ingredient's `food` exists in `data/foods.yml` and `grams` is positive.
 
 If you add a new diet or allergen key, add it to `planner.yml` too — the pages
-and the planner both build their vocabularies from there.
+and the planner both build their vocabularies from there. To add a food to the
+nutrition table, add it to `tools/build_foods.py` (CoFID code or a labelled
+fallback) and rebuild `data/foods.yml`.
 
 ### How the planner chooses meals
 
@@ -77,8 +88,10 @@ repeat; snacks may, at a cost. `rankSwaps` finds alternatives for one slot.
 on **port 9003**. It writes the same `data/*.yml` files, so anything it does
 you can do, and vice versa:
 
-- **Recipes** (`/recipes`): list with a filter, add, edit, delete. Deleting
-  removes the recipe *and* its generated page (the build wipes `docs/`).
+- **Recipes** (`/recipes`): list with a filter, add, edit, delete. Ingredients
+  are picked from the food table with a weight in grams; the nutrition is
+  calculated. Deleting removes the recipe *and* its generated page (the build
+  wipes `docs/`).
 - **Planner** (`/planner`): defaults, slider ranges, meal patterns, meals,
   diets, allergens, featured recipes. It refuses to save a diet/allergen/meal
   that a recipe still uses rather than breaking the build.
@@ -90,10 +103,11 @@ you can do, and vice versa:
   public site. The push uses the repo's SSH remote and the service's `HOME`.
 - **Recipes are written by a hand-rolled writer** (`write_recipes` in
   `editor.py`) that reproduces the hand-written file byte for byte — the
-  nested ingredient/step lists and the inline `[dairy, gluten]` style depend on
-  it. `site.yml` / `planner.yml` / `about.yml` go through ruamel in round-trip
-  mode, and a no-op save must produce no diff — including the block scalar in
-  `about.yml`. Test both after touching the editor.
+  structured `food`/`grams`/`label` ingredient rows, the step lists and the
+  inline `[dairy, gluten]` style depend on it. `site.yml` / `planner.yml` /
+  `about.yml` go through ruamel in round-trip mode, and a no-op save must
+  produce no diff — including the block scalar in `about.yml`. Test both after
+  touching the editor.
 - After changing `editor.py`, run `make deploy-editor` — the service runs from
   this working tree and keeps the old code until restarted.
 

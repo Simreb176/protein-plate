@@ -33,8 +33,9 @@ const ProteinPlate = (() => {
         protein: sum.protein + recipe.protein,
         carbs: sum.carbs + recipe.carbs,
         fat: sum.fat + recipe.fat,
+        fibre: sum.fibre + recipe.fibre,
       }),
-      { calories: 0, protein: 0, carbs: 0, fat: 0 }
+      { calories: 0, protein: 0, carbs: 0, fat: 0, fibre: 0 }
     );
   }
 
@@ -289,7 +290,8 @@ if (typeof document !== "undefined") {
       renderTotals(target, total);
 
       summaryEl.textContent =
-        `${plan.picks.length} meals, ${total.calories} kcal and ${Math.round(total.protein)} g protein` +
+        `${plan.picks.length} meals, ${Math.round(total.calories)} kcal, ` +
+        `${Math.round(total.protein)} g protein and ${Math.round(total.fibre)} g fibre` +
         (diffProtein >= 0
           ? ` — ${diffProtein} g above your protein target.`
           : ` — ${Math.abs(diffProtein)} g short of your protein target.`);
@@ -304,13 +306,15 @@ if (typeof document !== "undefined") {
                 <span class="meal-time">${recipe.minutes} min</span>
               </div>
               <p class="meal-macros">
-                <span class="meal-protein">${recipe.protein} g protein</span>
-                <span>${recipe.calories} kcal</span>
-                <span>${recipe.carbs} g carbs</span>
-                <span>${recipe.fat} g fat</span>
+                <span class="meal-protein">${Math.round(recipe.protein)} g protein</span>
+                <span>${Math.round(recipe.calories)} kcal</span>
+                <span>${Math.round(recipe.carbs)} g carbs</span>
+                <span>${Math.round(recipe.fat)} g fat</span>
+                <span>${recipe.fibre.toFixed(1)} g fibre</span>
               </p>
               <p class="meal-meta">
                 ${escapeHtml(recipe.tags.join(" · "))}
+                <span>Serves ${recipe.servings}</span>
                 ${recipe.allergens.length
                   ? `<span class="meal-allergens">Contains ${escapeHtml(recipe.allergens.map(prettyAllergen).join(", "))}</span>`
                   : ""}

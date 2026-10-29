@@ -10,7 +10,7 @@
       <h1>Hit your protein.<br>Eat properly.</h1>
       <p class="hero-lede">{{ site.description }}</p>
       <ul class="hero-points">
-        <li>{{ recipes | length }} recipes, each with its protein and calories worked out</li>
+        <li>{{ recipes | length }} recipes, each with its protein, calories and fibre worked out</li>
         <li>Filter by diet and the allergens you need to avoid</li>
         <li>Swap any meal, or roll a whole new day</li>
       </ul>
@@ -154,12 +154,13 @@
       <a class="recipe-card" href="{{ base }}recipes/{{ recipe.slug }}/index.html">
         <div class="recipe-card-top">
           <span class="pill">{{ recipe.slot_label }}</span>
-          <span class="recipe-time">{{ recipe.minutes }} min</span>
+          <span class="recipe-time">{{ recipe.minutes }} min &middot; serves {{ recipe.servings }}</span>
         </div>
         <h3>{{ recipe.title }}</h3>
         <p class="recipe-macros">
-          <span><strong>{{ recipe.protein }} g</strong> protein</span>
-          <span>{{ recipe.calories }} kcal</span>
+          <span><strong>{{ recipe.protein | round(0) | int }} g</strong> protein</span>
+          <span>{{ recipe.calories | round(0) | int }} kcal</span>
+          <span>{{ recipe.fibre | round(1) }} g fibre</span>
         </p>
         <div class="macro-bar" aria-hidden="true">
           <span class="macro-protein" style="width: {{ (recipe.protein * 4 / recipe.calories * 100) | round(0) }}%"></span>

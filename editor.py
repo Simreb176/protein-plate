@@ -32,6 +32,7 @@ import subprocess
 import sys
 import time
 from io import StringIO
+from itertools import zip_longest
 from pathlib import Path
 
 import yaml
@@ -39,6 +40,8 @@ from flask import Flask, flash, redirect, render_template, request, url_for
 from ruamel.yaml import YAML
 from ruamel.yaml.comments import CommentedMap, CommentedSeq
 from ruamel.yaml.scalarstring import LiteralScalarString
+
+from nutrition import NutritionError, compute, display_label, load_foods
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "data"
@@ -84,6 +87,19 @@ def dump(path, data):
 def load_recipes():
     """Plain dicts: the recipes file is written by hand-rolled code, not ruamel."""
     return yaml.safe_load((DATA / "recipes.yml").read_text(encoding="utf-8")) or []
+
+
+def load_food_data():
+    return load_foods(DATA / "foods.yml")[0]
+
+
+def decorated(recipe):
+    """A recipe with its calculated per-serving nutrition attached."""
+    foods = load_food_data()
+    result = dict(recipe)
+    result.update(compute(recipe, foods))
+    result["ingredient_lines"] = [display_label(row, foods) for row in recipe.get("ingredients") or []]
+    return result
 
 
 def normalise(text):
@@ -137,16 +153,22 @@ def write_recipes(recipes):
         lines = [f"- slug: {scalar(recipe['slug'])}"]
         for key in ("title", "slot", "diet"):
             lines.append(f"  {key}: {scalar(recipe.get(key, ''))}")
-        for key in ("minutes", "calories", "protein", "carbs", "fat"):
+        for key in ("minutes", "servings"):
             lines.append(f"  {key}: {recipe.get(key, 0)}")
         for key in ("allergens", "tags"):
             values = recipe.get(key) or []
             lines.append(f"  {key}: [{', '.join(scalar(v) for v in values)}]")
-        for key in ("ingredients", "steps"):
+        lines.append("  ingredients:")
+        for item in recipe.get("ingredients") or []:
+            lines.append(f"  - food: {scalar(item['food'])}")
+            lines.append(f"    grams: {item['grams']:g}")
+            if item.get("label"):
+                lines.append(f"    label: {scalar(item['label'])}")
+        for key in ("steps",):
             values = recipe.get(key) or []
             if values:
                 lines.append(f"  {key}:")
-                lines.extend(f"    - {scalar(v)}" for v in values)
+                lines.extend(f"  - {scalar(v)}" for v in values)
             else:
                 lines.append(f"  {key}: []")
         if recipe.get("note"):
@@ -338,6 +360,7 @@ def save_about(form):
 def save_recipe(form, original_slug):
     planner = load_map(DATA / "planner.yml")
     recipes = load_recipes()
+    foods = load_food_data()
 
     slot_keys = list((planner.get("slots") or {}).keys())
     diet_keys = [d["key"] for d in planner.get("diets") or []]
@@ -352,10 +375,10 @@ def save_recipe(form, original_slug):
         problems.append("A recipe needs a web address (the slug).")
 
     numbers = {}
-    for field in ("minutes", "calories", "protein", "carbs", "fat"):
+    for field in ("minutes", "servings"):
         raw = normalise(form.get(field)).strip()
-        if not re.fullmatch(r"\d+", raw or ""):
-            problems.append(f"“{field}” needs a whole number, and “{raw}” isn't one.")
+        if not re.fullmatch(r"\d+", raw or "") or int(raw) < 1:
+            problems.append(f"“{field}” needs a whole number of at least 1, and “{raw}” isn't one.")
         else:
             numbers[field] = int(raw)
 
@@ -371,27 +394,65 @@ def save_recipe(form, original_slug):
     if unknown:
         problems.append(f"“{unknown[0]}” isn't in the allergen list.")
 
+    ingredients = []
+    rows = list(zip_longest(
+        form.getlist("ingredient_food"),
+        form.getlist("ingredient_grams"),
+        form.getlist("ingredient_label"),
+        fillvalue="",
+    ))
+    saw_row = any(food.strip() or grams.strip() for food, grams, _ in rows)
+    for food, grams_raw, label in rows:
+        food = normalise(food).strip()
+        grams_raw = normalise(grams_raw).strip()
+        label = normalise(label).strip()
+        if not food and not grams_raw:
+            continue
+        if food not in foods:
+            problems.append(f"“{food or '(blank)'}” isn't one of the foods in the nutrition table.")
+            continue
+        if not re.fullmatch(r"\d+(\.\d+)?", grams_raw):
+            problems.append(f"The grams for “{label or foods[food]['name']}” need to be a number.")
+            continue
+        grams = float(grams_raw) if "." in grams_raw else int(grams_raw)
+        if grams <= 0:
+            problems.append(f"The grams for “{label or foods[food]['name']}” need to be more than zero.")
+            continue
+        row = {"food": food, "grams": grams}
+        if label:
+            row["label"] = label
+        ingredients.append(row)
+    if not ingredients and not saw_row:
+        problems.append("Add at least one ingredient.")
+
     others = [r for r in recipes if r["slug"] != original_slug]
     if any(r["slug"] == slug for r in others):
         problems.append(f"There's already a recipe at “{slug}” — give this one a different address.")
-
-    if problems:
-        raise EditorError("Nothing was saved, because of this:\n\n" + "\n".join(f"• {p}" for p in problems))
 
     recipe = {
         "slug": slug,
         "title": title,
         "slot": slot,
         "diet": diet,
-        **numbers,
+        "minutes": numbers.get("minutes", 1),
+        "servings": numbers.get("servings", 1),
         "allergens": ticks,
         "tags": [tag.strip() for tag in normalise(form.get("tags")).split(",") if tag.strip()],
-        "ingredients": [line.strip() for line in normalise(form.get("ingredients")).splitlines() if line.strip()],
+        "ingredients": ingredients,
         "steps": [line.strip() for line in normalise(form.get("steps")).splitlines() if line.strip()],
     }
     note = normalise(form.get("note")).strip()
     if note:
         recipe["note"] = note
+
+    if not problems:
+        try:
+            compute(recipe, foods)
+        except NutritionError as error:
+            problems.append(str(error))
+
+    if problems:
+        raise EditorError("Nothing was saved, because of this:\n\n" + "\n".join(f"• {p}" for p in problems))
 
     if original_slug:
         recipes = [recipe if r["slug"] == original_slug else r for r in recipes]
@@ -574,7 +635,7 @@ def about_save():
 # --------------------------------------------------------------------------
 @app.get("/recipes")
 def recipes_page():
-    return render_template("recipes.html", recipes=load_recipes(), page="recipes")
+    return render_template("recipes.html", recipes=[decorated(r) for r in load_recipes()], page="recipes")
 
 
 @app.get("/recipes/new")
@@ -582,8 +643,9 @@ def recipe_new():
     return render_template(
         "recipe_form.html",
         recipe={"slug": "", "title": "", "slot": "", "diet": "",
-                "minutes": "", "calories": "", "protein": "", "carbs": "", "fat": "",
+                "minutes": "", "servings": 1,
                 "allergens": [], "tags": [], "ingredients": [], "steps": [], "note": ""},
+        foods=load_food_data(),
         planner=load_map(DATA / "planner.yml"),
         editing=False,
         page="recipes",
@@ -596,8 +658,8 @@ def recipe_edit(slug):
     if not found:
         flash("That recipe isn't there any more.", "warn")
         return redirect(url_for("recipes_page"))
-    return render_template("recipe_form.html", recipe=found, planner=load_map(DATA / "planner.yml"),
-                           editing=True, page="recipes")
+    return render_template("recipe_form.html", recipe=decorated(found), foods=load_food_data(),
+                           planner=load_map(DATA / "planner.yml"), editing=True, page="recipes")
 
 
 @app.post("/recipes/save")
@@ -612,6 +674,7 @@ def recipe_save():
             render_template(
                 "recipe_form.html",
                 recipe=_recipe_from_form(request.form),
+                foods=load_food_data(),
                 planner=load_map(DATA / "planner.yml"),
                 editing=bool(original),
                 page="recipes",
@@ -623,19 +686,32 @@ def recipe_save():
 
 
 def _recipe_from_form(form):
+    ingredients = []
+    for food, grams, label in zip_longest(
+        form.getlist("ingredient_food"),
+        form.getlist("ingredient_grams"),
+        form.getlist("ingredient_label"),
+        fillvalue="",
+    ):
+        food = normalise(food).strip()
+        grams = normalise(grams).strip()
+        label = normalise(label).strip()
+        if not food and not grams:
+            continue
+        row = {"food": food, "grams": grams}
+        if label:
+            row["label"] = label
+        ingredients.append(row)
     return {
         "slug": normalise(form.get("slug")),
         "title": normalise(form.get("title")),
         "slot": normalise(form.get("slot")),
         "diet": normalise(form.get("diet")),
         "minutes": normalise(form.get("minutes")),
-        "calories": normalise(form.get("calories")),
-        "protein": normalise(form.get("protein")),
-        "carbs": normalise(form.get("carbs")),
-        "fat": normalise(form.get("fat")),
+        "servings": normalise(form.get("servings")),
         "allergens": form.getlist("allergens"),
         "tags": [t.strip() for t in normalise(form.get("tags")).split(",") if t.strip()],
-        "ingredients": normalise(form.get("ingredients")).strip().splitlines(),
+        "ingredients": ingredients,
         "steps": normalise(form.get("steps")).strip().splitlines(),
         "note": normalise(form.get("note")),
     }

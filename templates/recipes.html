@@ -9,7 +9,7 @@
   <header class="page-head">
     <p class="eyebrow">The shelf</p>
     <h1>Every recipe</h1>
-    <p>{{ recipes | length }} meals, each with its protein and calories worked out. Pick one and the planner will build a day around it.</p>
+    <p>{{ recipes | length }} meals, each with its protein, calories and fibre worked out. Pick one and the planner will build a day around it.</p>
   </header>
 
   <nav class="jump" aria-label="Jump to a meal">
@@ -31,12 +31,13 @@
       <a class="recipe-card" href="{{ base }}recipes/{{ recipe.slug }}/index.html">
         <div class="recipe-card-top">
           <span class="pill">{{ recipe.diet_label }}</span>
-          <span class="recipe-time">{{ recipe.minutes }} min</span>
+          <span class="recipe-time">{{ recipe.minutes }} min &middot; serves {{ recipe.servings }}</span>
         </div>
         <h3>{{ recipe.title }}</h3>
         <p class="recipe-macros">
-          <span><strong>{{ recipe.protein }} g</strong> protein</span>
-          <span>{{ recipe.calories }} kcal</span>
+          <span><strong>{{ recipe.protein | round(0) | int }} g</strong> protein</span>
+          <span>{{ recipe.calories | round(0) | int }} kcal</span>
+          <span>{{ recipe.fibre | round(1) }} g fibre</span>
         </p>
         <div class="macro-bar" aria-hidden="true">
           <span class="macro-protein" style="width: {{ (recipe.protein * 4 / recipe.calories * 100) | round(0) }}%"></span>

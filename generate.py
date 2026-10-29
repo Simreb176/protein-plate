@@ -21,6 +21,8 @@ import yaml
 from jinja2 import Environment, FileSystemLoader
 from markupsafe import Markup
 
+from nutrition import NutritionError, compute, display_label, load_foods
+
 try:
     import markdown
 except ImportError:  # markdown is optional — see requirements.txt
@@ -85,11 +87,12 @@ def asset_version(names):
     return digest.hexdigest()[:10]
 
 
-def load_recipes(planner):
+def load_recipes(planner, foods):
     """Read the recipe shelf and check it against the planner's vocabulary.
 
     A typo in `diet:` or `allergens:` would quietly make a recipe unfindable in
-    the planner, so the build stops and says which recipe is wrong.
+    the planner, so the build stops and says which recipe is wrong. Nutrition
+    is calculated from the ingredient rows — never typed in by hand.
     """
     diets = [d["key"] for d in planner["diets"]]
     allergens = [a["key"] for a in planner["allergens"]]
@@ -119,15 +122,24 @@ def load_recipes(planner):
                 f"use {', '.join(allergens)}."
             )
 
-        for field in ("calories", "protein", "carbs", "fat", "minutes"):
+        for field in ("minutes", "servings"):
             value = recipe.get(field)
-            if not isinstance(value, int) or value < 0:
+            if not isinstance(value, (int, float)) or value < 0:
                 raise SystemExit(f"{where} needs a whole number for “{field}”.")
+        if recipe.get("servings", 1) < 1:
+            raise SystemExit(f"{where} needs at least one serving.")
+
+        try:
+            nutrition = compute(recipe, foods)
+        except NutritionError as error:
+            raise SystemExit(str(error))
 
         recipe.setdefault("allergens", [])
         recipe.setdefault("tags", [])
         recipe.setdefault("ingredients", [])
         recipe.setdefault("steps", [])
+        recipe["ingredient_lines"] = [display_label(row, foods) for row in recipe["ingredients"]]
+        recipe.update(nutrition)
         recipe["diet_label"] = next(d["label"] for d in planner["diets"] if d["key"] == recipe["diet"])
         recipe["slot_label"] = planner["slots"][recipe["slot"]]
         recipe["allergen_labels"] = [
@@ -145,7 +157,8 @@ def main():
     site = load_yaml(DATA / "site.yml")
     planner = load_yaml(DATA / "planner.yml")
     about = load_yaml(DATA / "about.yml")
-    recipes = load_recipes(planner)
+    foods, nutrition_source = load_foods(DATA / "foods.yml")
+    recipes = load_recipes(planner, foods)
 
     env = Environment(loader=FileSystemLoader(TEMPLATES), autoescape=True)
     env.filters["markdown"] = render_markdown
@@ -158,6 +171,7 @@ def main():
         "about": about,
         "recipes": recipes,
         "featured": featured,
+        "nutrition_source": nutrition_source,
         "asset_version": asset_version(["styles.css", "app.js"]),
         "year": datetime.now().year,
     }
@@ -206,6 +220,8 @@ def main():
                 "protein": r["protein"],
                 "carbs": r["carbs"],
                 "fat": r["fat"],
+                "fibre": r["fibre"],
+                "servings": r["servings"],
                 "allergens": r["allergens"],
                 "tags": r["tags"],
             }

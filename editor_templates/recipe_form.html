@@ -1,11 +1,18 @@
 {% extends "base.html" %}
 {% block title %}{{ 'Edit recipe' if editing else 'Add a recipe' }} &middot; Edit Protein Plate{% endblock %}
 
+{% macro food_options(selected='') -%}
+<option value="">Pick a food…</option>
+{% for key, food in foods.items() %}
+<option value="{{ key }}" {% if key == selected %}selected{% endif %}>{{ food.name }}</option>
+{% endfor %}
+{%- endmacro %}
+
 {% block content %}
 <h2 class="heading">{{ 'Edit “' ~ recipe.title ~ '”' if editing else 'Add a recipe' }}</h2>
 <p class="hint">
-  The numbers matter: the planner uses calories and protein to build a day, so keep them honest.
-  Press <strong>Save</strong> and the site is rebuilt.
+  Nutrition is worked out from the ingredient weights using CoFID — there are no calorie
+  boxes to fill in. Press <strong>Save</strong> and the site is rebuilt.
 </p>
 
 <form method="post" action="{{ url_for('recipe_save') }}">
@@ -45,30 +52,33 @@
   </div>
 
   <div class="card">
-    <h3>The numbers</h3>
-    <div class="grid three">
+    <h3>Time and servings</h3>
+    <div class="grid two">
       <div class="field">
         <label for="minutes">Minutes</label>
-        <input type="number" id="minutes" name="minutes" value="{{ recipe.minutes }}" min="0">
+        <input type="number" id="minutes" name="minutes" value="{{ recipe.minutes }}" min="1">
       </div>
       <div class="field">
-        <label for="calories">Calories</label>
-        <input type="number" id="calories" name="calories" value="{{ recipe.calories }}" min="0">
-      </div>
-      <div class="field">
-        <label for="protein">Protein (g)</label>
-        <input type="number" id="protein" name="protein" value="{{ recipe.protein }}" min="0">
-      </div>
-      <div class="field">
-        <label for="carbs">Carbs (g)</label>
-        <input type="number" id="carbs" name="carbs" value="{{ recipe.carbs }}" min="0">
-      </div>
-      <div class="field">
-        <label for="fat">Fat (g)</label>
-        <input type="number" id="fat" name="fat" value="{{ recipe.fat }}" min="0">
+        <label for="servings">Servings the ingredients make</label>
+        <input type="number" id="servings" name="servings" value="{{ recipe.servings or 1 }}" min="1">
+        <div class="small">The nutrition shown per serving is divided by this.</div>
       </div>
     </div>
   </div>
+
+  {% if editing and recipe.calories %}
+  <div class="card">
+    <h3>Per serving now</h3>
+    <p class="nutrition-preview">
+      {{ recipe.calories | round(0) | int }} kcal &middot;
+      {{ recipe.protein | round(1) }} g protein &middot;
+      {{ recipe.carbs | round(1) }} g carbs &middot;
+      {{ recipe.fat | round(1) }} g fat &middot;
+      {{ recipe.fibre | round(1) }} g fibre
+    </p>
+    <div class="small">Calculated from the ingredients below; save to recalculate.</div>
+  </div>
+  {% endif %}
 
   <div class="card">
     <h3>Labels</h3>
@@ -92,12 +102,31 @@
   </div>
 
   <div class="card">
-    <h3>The recipe</h3>
-    <div class="field">
-      <label for="ingredients">Ingredients — one per line</label>
-      <textarea id="ingredients" name="ingredients" rows="8"
-                placeholder="300 g 0% Greek yoghurt&#10;80 g mixed berries">{{ (recipe.ingredients or []) | join('\n') }}</textarea>
+    <h3>Ingredients</h3>
+    <p class="hint">
+      Pick a food and its weight in grams. The display text is optional — leave it blank
+      and the site writes the grams and food name for you.
+    </p>
+    <div id="ingredient-rows">
+      {% for row in (recipe.ingredients or [{}]) %}
+      <div class="ingredient-row">
+        <select name="ingredient_food" aria-label="Food">{{ food_options(row.food or '') }}</select>
+        <input type="number" name="ingredient_grams" min="0" step="any"
+               value="{{ row.grams or '' }}" aria-label="Grams" placeholder="grams">
+        <input type="text" name="ingredient_label" value="{{ row.label or '' }}"
+               aria-label="Display text" placeholder="Display text (optional)">
+        <button type="button" class="danger remove-ingredient">Remove</button>
+      </div>
+      {% endfor %}
     </div>
+    <button type="button" class="addrow" id="add-ingredient">+ Add an ingredient</button>
+    <div class="small">
+      Foods and their nutrition come from <code>data/foods.yml</code>, built from CoFID 2021.
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Method and notes</h3>
     <div class="field">
       <label for="steps">Method — one step per line</label>
       <textarea id="steps" name="steps" rows="6"
@@ -116,6 +145,15 @@
     </div>
   </div>
 </form>
+
+<template id="ingredient-template">
+  <div class="ingredient-row">
+    <select name="ingredient_food" aria-label="Food">{{ food_options('') }}</select>
+    <input type="number" name="ingredient_grams" min="0" step="any" aria-label="Grams" placeholder="grams">
+    <input type="text" name="ingredient_label" aria-label="Display text" placeholder="Display text (optional)">
+    <button type="button" class="danger remove-ingredient">Remove</button>
+  </div>
+</template>
 {% endblock %}
 
 {% block scripts %}
@@ -132,6 +170,23 @@ title.addEventListener('input', () => {
 slug.addEventListener('input', () => {
   slug.dataset.touched = 'yes';
   preview.textContent = slug.value;
+});
+
+const rows = document.getElementById('ingredient-rows');
+document.getElementById('add-ingredient').addEventListener('click', () => {
+  const node = document.getElementById('ingredient-template').content.cloneNode(true);
+  rows.appendChild(node);
+  const select = rows.lastElementChild.querySelector('select');
+  if (select) select.focus();
+});
+rows.addEventListener('click', event => {
+  if (!event.target.closest('.remove-ingredient')) return;
+  const row = event.target.closest('.ingredient-row');
+  if (rows.children.length === 1) {
+    row.querySelectorAll('input, select').forEach(field => { field.value = ''; });
+  } else {
+    row.remove();
+  }
 });
 </script>
 {% endblock %}

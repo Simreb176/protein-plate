@@ -15,7 +15,7 @@
       <div class="recipe-labels">
         <span class="pill">{{ recipe.slot_label }}</span>
         <span class="pill pill-quiet">{{ recipe.diet_label }}</span>
-        <span class="recipe-time">{{ recipe.minutes }} min</span>
+        <span class="recipe-time">{{ recipe.minutes }} min &middot; serves {{ recipe.servings }}</span>
       </div>
       <h1>{{ recipe.title }}</h1>
       {% if recipe.note %}<p class="recipe-note">{{ recipe.note }}</p>{% endif %}
@@ -26,7 +26,7 @@
         <section aria-labelledby="ingredients-heading">
           <h2 id="ingredients-heading">Ingredients</h2>
           <ul class="ingredients">
-            {% for item in recipe.ingredients %}<li>{{ item }}</li>{% endfor %}
+            {% for item in recipe.ingredient_lines %}<li>{{ item }}</li>{% endfor %}
           </ul>
         </section>
 
@@ -42,10 +42,11 @@
         <div class="nutrition">
           <h2>Per serving</h2>
           <dl class="nutrition-list">
-            <div><dt>Calories</dt><dd>{{ recipe.calories }} kcal</dd></div>
-            <div><dt>Protein</dt><dd>{{ recipe.protein }} g</dd></div>
-            <div><dt>Carbs</dt><dd>{{ recipe.carbs }} g</dd></div>
-            <div><dt>Fat</dt><dd>{{ recipe.fat }} g</dd></div>
+            <div><dt>Calories</dt><dd>{{ recipe.calories | round(0) | int }} kcal</dd></div>
+            <div><dt>Protein</dt><dd>{{ recipe.protein | round(1) }} g</dd></div>
+            <div><dt>Carbs</dt><dd>{{ recipe.carbs | round(1) }} g</dd></div>
+            <div><dt>Fat</dt><dd>{{ recipe.fat | round(1) }} g</dd></div>
+            <div><dt>Fibre</dt><dd>{{ recipe.fibre | round(1) }} g</dd></div>
           </dl>
           <div class="macro-bar macro-bar-lg" aria-hidden="true">
             <span class="macro-protein" style="width: {{ (recipe.protein * 4 / recipe.calories * 100) | round(0) }}%"></span>
@@ -57,6 +58,11 @@
             <li><span class="dot dot-carb"></span>Carbs</li>
             <li><span class="dot dot-fat"></span>Fat</li>
           </ul>
+          <p class="nutrition-source">
+            Calculated from
+            <a href="{{ nutrition_source.url }}" target="_blank" rel="noopener">{{ nutrition_source.name }}</a>.
+            Estimates, not lab results.
+          </p>
         </div>
 
         {% if recipe.allergen_labels %}
