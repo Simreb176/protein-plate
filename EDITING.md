@@ -91,8 +91,9 @@ doesn't.
 Calories, protein, carbs, fat and fibre are calculated from the ingredient
 weights using the UK **CoFID 2021** dataset (McCance and Widdowson's
 Composition of Foods Integrated Dataset). Fibre is AOAC fibre where CoFID has
-it. A few products CoFID doesn't cover — 0% Greek yoghurt, protein powders,
-seitan and chia — use a typical label value, and the recipe page says so.
+it. Products CoFID doesn't cover (0% Greek yoghurt, protein powders, seitan,
+chia and a few breads and snacks) use a typical label value; foods without an
+exact match use the closest CoFID entry, and `data/foods.yml` records which.
 
 It is an estimate, not a lab analysis. Check labels if you need exact numbers,
 especially for allergies.
